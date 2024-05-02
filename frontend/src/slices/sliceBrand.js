@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import { setHeaders, url } from './api';
 
 const initialState = {
-    stateCategories: [],
-    stateRefreshCategories: null,
+    stateBrand: [],
+    stateRefreshBrand: null,
     status: null,
     createStatus: null,
     editStatus: null,
@@ -14,11 +14,11 @@ const initialState = {
 };
 
 //fetch user
-export const categoriesFetch = createAsyncThunk(
-    "categories/categoriesFetch",
+export const brandFetch = createAsyncThunk(
+    "brand/brandFetch",
     async () => {
         try {
-            const response = await axios.get(`${url}/categories`);
+            const response = await axios.get(`${url}/brand`);
             return response.data;
         } catch (error) {
             throw error;
@@ -28,12 +28,12 @@ export const categoriesFetch = createAsyncThunk(
 );
 
 //create user
-export const categoriesCreate = createAsyncThunk(
-    "categories/categoriesCreate",
+export const brandCreate = createAsyncThunk(
+    "brand/brandCreate",
     async (values, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                `${url}/categories`,
+                `${url}/brand`,
                 values,
             );
             return response.data;
@@ -49,13 +49,13 @@ export const categoriesCreate = createAsyncThunk(
 );
 
 //edit user
-export const categoriesEdit = createAsyncThunk(
-    "categories/categoriesEdit",
+export const brandEdit = createAsyncThunk(
+    "brand/brandEdit",
     async (values) => {
         try {
             const response = await axios.put(
-                `${url}/categories/${values.category.categoryId}`,
-                values.category,
+                `${url}/brand/${values.brand.brandId}`,
+                values.brand,
             );
 
             return response.data;
@@ -66,12 +66,12 @@ export const categoriesEdit = createAsyncThunk(
 );
 
 //delete user
-export const categoriesDelete = createAsyncThunk(
-    "categories/categoriesDelete",
-    async (categoryId) => {
+export const brandDelete = createAsyncThunk(
+    "brand/brandDelete",
+    async (brandId) => {
         try {
             const response = await axios.delete(
-                `${url}/categories/${categoryId}`,
+                `${url}/brand/${brandId}`,
             );
 
             return response.data;
@@ -83,28 +83,28 @@ export const categoriesDelete = createAsyncThunk(
 
 //redux reducers atau pembuatan state untuk digunakan pada suatu komponen
 const sliceCategories = createSlice({
-    name: "categories",
+    name: "brand",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(categoriesFetch.pending, (state, action) => {
+            .addCase(brandFetch.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(categoriesFetch.fulfilled, (state, action) => {
+            .addCase(brandFetch.fulfilled, (state, action) => {
                 state.stateCategories = action.payload;
                 state.status = "success";
             })
-            .addCase(categoriesFetch.rejected, (state, action) => {
+            .addCase(brandFetch.rejected, (state, action) => {
                 state.status = "rejected";
             })
-            .addCase(categoriesCreate.pending, (state, action) => {
+            .addCase(brandCreate.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(categoriesCreate.fulfilled, (state, action) => {
+            .addCase(brandCreate.fulfilled, (state, action) => {
                 state.createStatus = "success";
-                state.stateRefreshCategories = Math.random();
-                toast.success(`Berhasil membuat kategori`, {
+                state.stateRefreshBrand = Math.random();
+                toast.success(`Berhasil membuat brand`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -115,10 +115,10 @@ const sliceCategories = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(categoriesCreate.rejected, (state, action) => {
+            .addCase(brandCreate.rejected, (state, action) => {
                 state.status = "rejected";
                 state.errorMessage = action.payload;
-                toast.error(`Gagal membuat kategori: ${action.payload}`, {
+                toast.error(`Gagal membuat brand: ${action.payload}`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -129,50 +129,50 @@ const sliceCategories = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(categoriesEdit.pending, (state, action) => {
+            .addCase(brandEdit.pending, (state, action) => {
                 state.editStatus = "pending";
             })
-            .addCase(categoriesEdit.fulfilled, (state, action) => {
+            .addCase(brandEdit.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const updatedCategory = state.stateCategories.map((category) =>
-                        category.category_id === action.payload.category_id ? action.payload : category
+                    const updatedBrand = state.stateBrand.map((brand) =>
+                        brand.brand_id === action.payload.brand_id ? action.payload : brand
                     );
-                    state.stateCategories = updatedCategory;
+                    state.stateBrand = updatedBrand;
                     state.editStatus = "success";
-                    state.stateRefreshCategories = Math.random();
-                    toast.info("Category Telah Diedit!", {
+                    state.stateRefreshBrand = Math.random();
+                    toast.info("Brand Telah Diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Category Masih Digunakan!", {
+                    toast.error("Brand Masih Digunakan!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(categoriesEdit.rejected, (state, action) => {
+            .addCase(brandEdit.rejected, (state, action) => {
                 state.editStatus = "rejected";
             })
-            .addCase(categoriesDelete.pending, (state, action) => {
+            .addCase(brandDelete.pending, (state, action) => {
                 state.deleteStatus = "pending";
             })
-            .addCase(categoriesDelete.fulfilled, (state, action) => {
+            .addCase(brandDelete.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const newList = state.stateCategories.filter(
-                        (item) => item.category_id !== action.payload.category_id
+                    const newList = state.stateBrand.filter(
+                        (item) => item.brand_id !== action.payload.brand_id
                     );
-                    state.stateCategories = newList;
+                    state.stateBrand = newList;
                     state.deleteStatus = "success";
-                    state.stateRefreshCategories = Math.random();
-                    toast.success("Category Telah Dihapus!", {
+                    state.stateRefreshBrand = Math.random();
+                    toast.success("Brand Telah Dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Category Masih Digunakan!", {
+                    toast.error("Brand Masih Digunakan!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(categoriesDelete.rejected, (state, action) => {
+            .addCase(brandDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
             });
     },

@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import axios from "axios";
 import productsReducer, { productsFetch } from "./slices/sliceProducts";
+import categoriesReducer, { categoriesFetch } from "./slices/sliceCategories";
 import usersReducer, { usersFetch } from "./slices/sliceUsers";
 import AuthReducer from "./slices/sliceAuth";
 
@@ -17,11 +18,13 @@ const store = configureStore({
   reducer: {
     session: AuthReducer,
     products: productsReducer,
+    categories: categoriesReducer,
     users: usersReducer,
   },
 });
 
 store.dispatch(productsFetch());
+store.dispatch(categoriesFetch());  
 store.dispatch(usersFetch());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -34,7 +34,11 @@ export const productsCreate = createAsyncThunk(
             const response = await axios.post(
                 `${url}/products`,
                 values,
-                setHeaders(),
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                }
             );
 
             return response.data;

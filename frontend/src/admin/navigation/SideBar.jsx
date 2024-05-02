@@ -30,12 +30,21 @@ const SideBar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="#" className="flex items-center transition ease-in-out p-2 mx-2 text-gray-900 rounded-md dark:text-white hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                        <NavLink to="/admin/categories" className="flex items-center transition ease-in-out p-2 mx-2 text-gray-900 rounded-md dark:text-white hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
                             <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z" />
                                 <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z" />
                             </svg>
                             <span className="flex-1 ml-3 whitespace-nowrap">Category</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="#" className="flex items-center transition ease-in-out p-2 mx-2 text-gray-900 rounded-md dark:text-white hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                            <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
+                            </svg>
+
+                            <span className="flex-1 ml-3 whitespace-nowrap">Brand</span>
                         </NavLink>
                     </li>
                     <li>

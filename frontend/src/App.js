@@ -14,6 +14,10 @@ import ProductsDelete from "./admin/products/ProductsDelete";
 import DashboardClient from "./client/dashboard/DashboardClient";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
 import Categories from "./admin/categories/Categories";
+import CategoriesList from "./admin/categories/CategoriesList";
+import CategroiesCreate from "./admin/categories/CategoriesCreate";
+import CategroiesEdit from "./admin/categories/CategoriesEdit";
+import CategoriesDelete from "./admin/categories/CategoriesDelete";
 
 function App() {
   return (
@@ -33,10 +37,10 @@ function App() {
               <Route path="delete-product/:pId" element={<ProductsDelete />} />
             </Route>
             <Route path="categories" element={<Categories />}>
-              <Route index element={<ProductsList />} />
-              <Route path="create-category" element={<ProductsCreate />} />
-              <Route path="edit-category/:cId" element={<ProductsEdit />} />
-              <Route path="delete-category/:cId" element={<ProductsDelete />} />
+              <Route index element={<CategoriesList />} />
+              <Route path="create-category" element={<CategroiesCreate />} />
+              <Route path="edit-category/:cId" element={<CategroiesEdit />} />
+              <Route path="delete-category/:cId" element={<CategoriesDelete />} />
             </Route>
           </Route>
         </Routes>

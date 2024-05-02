@@ -16,9 +16,9 @@ export default function ProductsCreate() {
     const [savePicProducts, setSavePicProducts] = useState(null);
     const [nameProducts, setNameProducts] = useState("");
     const [categoryProducts, setCategoryProducts] = useState(0);
+    const [brandProducts, setBrandProducts] = useState(0);
     const [priceProducts, setPriceProducts] = useState(0);
     const [descriptionProducts, setDescriptionProducts] = useState("");
-    const [dateProducts, setDateProducts] = useState("");
 
     const handleUploadImg = (e) => {
         const img = e.target.files[0];
@@ -29,27 +29,19 @@ export default function ProductsCreate() {
 
     const handleCreateProducts = (e) => {
         e.preventDefault();
-        // console.log(nameProducts);
-        // console.log(categoryProducts);
-        // console.log(priceProducts);
-        // console.log(descriptionProducts);
-        // console.log(dateProducts);
+
         const catP = parseInt(categoryProducts, 10);
         const priceP = parseInt(priceProducts, 10);
-
-        // const ip = new FormData();
-        // ip.append("image", savePicProducts);
-
-        // axios.post(`${url}/imgUp`, ip).then(res => {}).catch(er => console.log(er));
+        const formData = new FormData();
+        formData.append('image', savePicProducts);
 
         dispatch(productsCreate({
             productName: nameProducts,
-            categoryId: catP,
-            price: priceP,
-            description: descriptionProducts,
-            createdAt: dateProducts,
-            image: savePicProducts,
-        }));
+            productCategory: catP,
+            productBrand: brandProducts,
+            productDesc: descriptionProducts,
+            productPrice: priceP,
+        }, formData));
         
         setNameProducts("");
         setCategoryProducts("");
@@ -115,6 +107,27 @@ export default function ProductsCreate() {
                     </div>
                     <div className="mb-3">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Brand Produk :
+                        </label>
+                        <select
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            onChange={(e) => setBrandProducts(e.target.value)}
+                            required
+                            defaultValue="cat"
+                        >
+                            <option value="cat" disabled hidden>
+                                Pilih Brand
+                            </option>
+                            {/* memanggil isi dari kategori menggunakan state */}
+                            {/* {stateCategoryProducts && stateCategoryProducts.map((item) => (
+                                <option key={item.category_id} value={item.category_id}>
+                                    {item.category_name}
+                                </option>
+                            ))} */}
+                        </select>
+                    </div>
+                    <div className="mb-3">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Harga Produk :
                         </label>
                         <input
@@ -137,19 +150,6 @@ export default function ProductsCreate() {
                             rows="3"
                             value={descriptionProducts}
                             onChange={(e) => setDescriptionProducts(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Tanggal Dibuat :
-                        </label>
-                        <input
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            type="date"
-                            placeholder="Isi Tanggal Dibuatnya Produk"
-                            value={dateProducts}
-                            onChange={(e) => setDateProducts(e.target.value)}
                             required
                         />
                     </div>

@@ -7,11 +7,12 @@ export function up(knex) {
         table.increments('product_id').primary();
         table.string('product_name').notNullable();
         table.integer('category_id').unsigned();
-        table.string('product_brand').notNullable();
+        table.integer('brand_id').unsigned();
         table.string('product_desc').notNullable();
         table.integer('product_price').notNullable();
         table.string('product_image').notNullable();
         table.foreign('category_id').references('category_id').inTable('categories');
+        table.foreign('brand_id').references('brand_id').inTable('brand');
         table.integer('product_stock').nullable().defaultTo(0);
     })
 }

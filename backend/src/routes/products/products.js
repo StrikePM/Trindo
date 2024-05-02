@@ -35,13 +35,15 @@ router.get('/products', verifyUser, isAdmin, async (req, res) => {
         a.product_name,
         b.category_id,
         b.category_name,
-        a.product_brand,
+        c.brand_id,
+        c.brand_name,
         a.product_desc,
         a.product_price,
         a.product_image,
         a.product_stock
         FROM products a INNER JOIN categories b 
-        ON a.category_id = b.category_id 
+        ON a.category_id = b.category_id  INNER JOIN brand c
+        ON a.brand_id = c.brand_id
         ORDER BY a.product_id`);
         res.status(200).json(data[0]);
     } catch (error) {
@@ -59,36 +61,36 @@ router.get('/products', verifyUser, isAdmin, async (req, res) => {
 router.post('/products', verifyUser, isAdmin, upload.single('image'), async (req, res) => {
     const conn = await getConnection()
     try {
-        const { productName, productCategory, productBrand, productDesc, productPrice, image } = req.body;
+        const { productName, productCategory, productBrand, productDesc, productPrice } = req.body;
         if(!productName || !productCategory || !productBrand || !productDesc || !productPrice) return res.status(204).json({msg: 'field kosong'});
 
-        console.log(req.file.path);
-        // // Upload image ke Cloudinary
-        // cloudinary.uploader.upload(req.file.path, { folder: "Trindo" }, async function (err, result) {
-        //     if (err) {
-        //         console.log(err);
-        //         return res.status(500).json({
-        //             success: false,
-        //             message: "Error uploading image"
-        //         });
-        //     }
+        console.log(req.file);
+        // Upload image ke Cloudinary
+        cloudinary.uploader.upload(req.file.path, { folder: "Trindo" }, async function (err, result) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error uploading image"
+                });
+            }
 
-        //     // Insert product ke database menggunakan image URL
-        //     const imageUrl = result.url;
-        //     const data = await conn.execute(`INSERT INTO products VALUES(DEFAULT,?,?,?,?,?,?,DEFAULT)`, [productName,
-        //         productCategory, productBrand, productDesc, productPrice, imageUrl]);
+            // Insert product ke database menggunakan image URL
+            const imageUrl = result.url;
+            const data = await conn.execute(`INSERT INTO products VALUES(DEFAULT,?,?,?,?,?,?,DEFAULT)`, [productName,
+                productCategory, productBrand, productDesc, productPrice, imageUrl]);
 
-        //     let statusCode = 200;
-        //     let message = 'success';
-        //     if (data[0] == 0) {
-        //         statusCode = 400;
-        //         message = 'failed';
-        //     }
-        //     res.status(statusCode).json({
-        //         statusCode,
-        //         message,
-        //     });
-        // });
+            let statusCode = 200;
+            let message = 'success';
+            if (data[0] == 0) {
+                statusCode = 400;
+                message = 'failed';
+            }
+            res.status(statusCode).json({
+                statusCode,
+                message,
+            });
+        });
     } catch (e) {
         res.status(400).json({
             statusCode: 400,
@@ -137,7 +139,7 @@ router.put('/products/:id', verifyUser, isAdmin, upload.single('image'), async (
             }
 
             const imageUrl = result.url;
-            const data = await conn.execute(`UPDATE products SET product_name =?, category_id=?, product_brand=?, product_desc=?, product_price=?, product_image=? WHERE product_id = ?`,
+            const data = await conn.execute(`UPDATE products SET product_name =?, category_id=?, brand_id=?, product_desc=?, product_price=?, product_image=? WHERE product_id = ?`,
                 [productName, productCategory, productBrand, productDesc, productPrice, imageUrl, id]);
             let statusCode = 200;
             let message = 'success';

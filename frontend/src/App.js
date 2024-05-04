@@ -18,6 +18,11 @@ import CategoriesList from "./admin/categories/CategoriesList";
 import CategroiesCreate from "./admin/categories/CategoriesCreate";
 import CategroiesEdit from "./admin/categories/CategoriesEdit";
 import CategoriesDelete from "./admin/categories/CategoriesDelete";
+import Brand from "./admin/brand/Brand";
+import BrandList from "./admin/brand/BrandList";
+import BrandCreate from "./admin/brand/BrandCreate";
+import BrandEdit from "./admin/brand/BrandEdit";
+import BrandDelete from "./admin/brand/BrandDelete";
 
 function App() {
   return (
@@ -41,6 +46,12 @@ function App() {
               <Route path="create-category" element={<CategroiesCreate />} />
               <Route path="edit-category/:cId" element={<CategroiesEdit />} />
               <Route path="delete-category/:cId" element={<CategoriesDelete />} />
+            </Route>
+            <Route path="brand" element={<Brand />}>
+              <Route index element={<BrandList />} />
+              <Route path="create-brand" element={<BrandCreate />} />
+              <Route path="edit-brand/:bId" element={<BrandEdit />} />
+              <Route path="delete-brand/:bId" element={<BrandDelete />} />
             </Route>
           </Route>
         </Routes>

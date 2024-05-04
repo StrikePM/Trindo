@@ -26,9 +26,9 @@ export default function ProductsList() {
                 id: item.product_id,
                 pName: item.product_name,
                 pCat: item.category_name,
+                pBrand: item.brand_name,
                 pPrice: item.product_price,
                 pDesc: item.product_desc,
-                pBrand: item.product_brand,
                 pStock: item.product_stock,
                 pPic: item.product_image,
             };
@@ -42,6 +42,7 @@ export default function ProductsList() {
         { field: "pPic", headerName: "Gambar", width: 100, renderCell: (img) => <img className="w-[50px]" src={img.value} /> },
         { field: "pName", headerName: "Nama", width: 80 },
         { field: "pCat", headerName: "Kategori", width: 80 },
+        { field: "pBrand", headerName: "Merk", width: 80 },
         { field: "pPrice", headerName: "Harga", width: 80 },
         { field: "pStock", headerName: "stok", width: 80 },
         { field: "pDesc", headerName: "Deskripsi", width: 150 },

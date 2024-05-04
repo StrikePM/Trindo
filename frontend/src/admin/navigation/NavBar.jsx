@@ -14,7 +14,7 @@ const NavBar = () => {
 
     const handleAdminPage = (e) => {
         e.preventDefault();
-        navigate("/admin");
+        navigate("/admin/products");
     }
 
     const handleLogout = async (e) => {

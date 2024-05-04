@@ -9,6 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import axios from "axios";
 import productsReducer, { productsFetch } from "./slices/sliceProducts";
 import categoriesReducer, { categoriesFetch } from "./slices/sliceCategories";
+import brandReducer, { brandFetch } from "./slices/sliceBrand";
 import usersReducer, { usersFetch } from "./slices/sliceUsers";
 import AuthReducer from "./slices/sliceAuth";
 
@@ -19,12 +20,14 @@ const store = configureStore({
     session: AuthReducer,
     products: productsReducer,
     categories: categoriesReducer,
+    brand: brandReducer,
     users: usersReducer,
   },
 });
 
 store.dispatch(productsFetch());
 store.dispatch(categoriesFetch());  
+store.dispatch(brandFetch());  
 store.dispatch(usersFetch());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

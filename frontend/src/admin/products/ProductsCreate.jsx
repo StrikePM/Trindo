@@ -8,7 +8,8 @@ import { url } from "../../slices/api";
 export default function ProductsCreate() {
     const dispatch = useDispatch();
     const { createStatus } = useSelector((state) => state.products);
-    // const { stateCategoryProducts } = useSelector((state) => state.categoryProducts);
+    const { stateCategories } = useSelector((state) => state.categories);
+    const { stateBrand } = useSelector((state) => state.brand);
 
     const navigate = useNavigate();
 
@@ -30,25 +31,23 @@ export default function ProductsCreate() {
     const handleCreateProducts = (e) => {
         e.preventDefault();
 
-        const catP = parseInt(categoryProducts, 10);
         const priceP = parseInt(priceProducts, 10);
-        const formData = new FormData();
-        formData.append('image', savePicProducts);
 
         dispatch(productsCreate({
             productName: nameProducts,
-            productCategory: catP,
+            productCategory: categoryProducts,
             productBrand: brandProducts,
             productDesc: descriptionProducts,
             productPrice: priceP,
-        }, formData));
+            image: savePicProducts,
+        }));
         
         setNameProducts("");
         setCategoryProducts("");
+        setBrandProducts("");
         setPriceProducts("");
         setDescriptionProducts("");
-        setDateProducts("");
-        // navigate("/products");
+        navigate("/products");
     };
 
 
@@ -98,11 +97,11 @@ export default function ProductsCreate() {
                                 Pilih Kategori
                             </option>
                             {/* memanggil isi dari kategori menggunakan state */}
-                            {/* {stateCategoryProducts && stateCategoryProducts.map((item) => (
+                            {stateCategories && stateCategories.map((item) => (
                                 <option key={item.category_id} value={item.category_id}>
                                     {item.category_name}
                                 </option>
-                            ))} */}
+                            ))}
                         </select>
                     </div>
                     <div className="mb-3">
@@ -113,17 +112,17 @@ export default function ProductsCreate() {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             onChange={(e) => setBrandProducts(e.target.value)}
                             required
-                            defaultValue="cat"
+                            defaultValue="brand"
                         >
-                            <option value="cat" disabled hidden>
+                            <option value="brand" disabled hidden>
                                 Pilih Brand
                             </option>
                             {/* memanggil isi dari kategori menggunakan state */}
-                            {/* {stateCategoryProducts && stateCategoryProducts.map((item) => (
-                                <option key={item.category_id} value={item.category_id}>
-                                    {item.category_name}
+                            {stateBrand && stateBrand.map((item) => (
+                                <option key={item.brand_id} value={item.brand_id}>
+                                    {item.brand_name}
                                 </option>
-                            ))} */}
+                            ))}
                         </select>
                     </div>
                     <div className="mb-3">

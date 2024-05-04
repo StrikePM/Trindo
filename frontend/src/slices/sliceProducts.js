@@ -31,6 +31,15 @@ export const productsCreate = createAsyncThunk(
     "products/productsCreate",
     async (values) => {
         try {
+
+            const formData = new FormData();
+            formData.append('productName', values.productName);
+            formData.append('productCategory', values.productCategory);
+            formData.append('productBrand', values.productBrand);
+            formData.append('productDesc', values.productDesc);
+            formData.append('productPrice', values.productPrice);
+            formData.append('image', values.image);
+
             const response = await axios.post(
                 `${url}/products`,
                 values,

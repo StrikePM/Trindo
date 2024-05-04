@@ -92,7 +92,7 @@ const sliceCategories = createSlice({
                 state.status = "pending";
             })
             .addCase(brandFetch.fulfilled, (state, action) => {
-                state.stateCategories = action.payload;
+                state.stateBrand = action.payload;
                 state.status = "success";
             })
             .addCase(brandFetch.rejected, (state, action) => {

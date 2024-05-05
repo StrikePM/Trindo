@@ -12,7 +12,8 @@ router.get('/resupply', verifyUser, isAdmin, async (req, res) => {
         a.resupply_id,
         b.product_id,
         b.product_name,
-        a.resupply_stock
+        a.resupply_stock,
+        a.resupply_date
         FROM resupply a INNER JOIN products b 
         ON a.product_id = b.product_id 
         ORDER BY a.resupply_id`);
@@ -69,6 +70,7 @@ router.put('/resupply/:id', verifyUser, isAdmin, async (req, res) => {
     try {
         const { resupplyName, resupplyStock, resupplyDate } = req.body;
         const id = parseInt(req.params.id, 10);
+
         if(!resupplyName || !resupplyStock || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
 
         const getResupplyStock = await conn.execute(`SELECT resupply_stock FROM resupply WHERE resupply_id = ?`, [id]);

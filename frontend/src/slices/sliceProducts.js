@@ -65,10 +65,23 @@ export const productsEdit = createAsyncThunk(
     "products/productsEdit",
     async (values) => {
         try {
+
+            const formData = new FormData();
+            formData.append('productName', values.product.productName);
+            formData.append('productCategory', values.product.productCategory);
+            formData.append('productBrand', values.product.productBrand);
+            formData.append('productDesc', values.product.productDesc);
+            formData.append('productPrice', values.product.productPrice);
+            formData.append('image', values.product.image);
+            console.log(values.product.image);
             const response = await axios.put(
                 `${url}/products/${values.product.productId}`,
                 values.product,
-                setHeaders(),
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                }
             );
 
             return response.data;
@@ -87,7 +100,7 @@ export const productsDelete = createAsyncThunk(
     async (productId) => {
         try {
             const response = await axios.delete(
-                `${url}/product/${productId}`,
+                `${url}/products/${productId}`,
                 setHeaders(),
             );
 

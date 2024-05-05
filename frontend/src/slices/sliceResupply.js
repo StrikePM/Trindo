@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import { setHeaders, url } from './api';
 
 const initialState = {
-    stateUsers: [],
-    stateRefreshUsers: 0,
+    stateResupply: [],
+    stateRefreshRes: null,
     status: null,
     createStatus: null,
     editStatus: null,
@@ -14,11 +14,11 @@ const initialState = {
 };
 
 //fetch user
-export const usersFetch = createAsyncThunk(
-    "users/usersFetch",
+export const resupplyFetch = createAsyncThunk(
+    "resupply/resupplyFetch",
     async () => {
         try {
-            const response = await axios.get(`${url}/users`);
+            const response = await axios.get(`${url}/resupply`);
             return response.data;
         } catch (error) {
             throw error;
@@ -28,12 +28,12 @@ export const usersFetch = createAsyncThunk(
 );
 
 //create user
-export const usersCreate = createAsyncThunk(
-    "users/usersCreate",
+export const resupplyCreate = createAsyncThunk(
+    "resupply/resupplyCreate",
     async (values, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                `${url}/users`,
+                `${url}/resupply`,
                 values,
             );
             return response.data;
@@ -49,13 +49,13 @@ export const usersCreate = createAsyncThunk(
 );
 
 //edit user
-export const usersEdit = createAsyncThunk(
-    "users/usersEdit",
+export const resupplyEdit = createAsyncThunk(
+    "resupply/resupplyEdit",
     async (values) => {
         try {
-            const response = await axios.patch(
-                `${url}/users/${values.user.userId}`,
-                values.user,
+            const response = await axios.put(
+                `${url}/resupply/${values.resupply.resupplyId}`,
+                values.resupply,
             );
 
             return response.data;
@@ -66,12 +66,12 @@ export const usersEdit = createAsyncThunk(
 );
 
 //delete user
-export const usersDelete = createAsyncThunk(
-    "users/usersDelete",
-    async (userId) => {
+export const resupplyDelete = createAsyncThunk(
+    "resupply/resupplyDelete",
+    async (resupplyId) => {
         try {
             const response = await axios.delete(
-                `${url}/users/${userId}`,
+                `${url}/resupply/${resupplyId}`,
             );
 
             return response.data;
@@ -82,29 +82,29 @@ export const usersDelete = createAsyncThunk(
 );
 
 //redux reducers atau pembuatan state untuk digunakan pada suatu komponen
-const sliceUsers = createSlice({
-    name: "users",
+const sliceCategories = createSlice({
+    name: "resupply",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(usersFetch.pending, (state, action) => {
+            .addCase(resupplyFetch.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(usersFetch.fulfilled, (state, action) => {
-                state.stateUsers = action.payload;
+            .addCase(resupplyFetch.fulfilled, (state, action) => {
+                state.stateResupply = action.payload;
                 state.status = "success";
             })
-            .addCase(usersFetch.rejected, (state, action) => {
+            .addCase(resupplyFetch.rejected, (state, action) => {
                 state.status = "rejected";
             })
-            .addCase(usersCreate.pending, (state, action) => {
+            .addCase(resupplyCreate.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(usersCreate.fulfilled, (state, action) => {
+            .addCase(resupplyCreate.fulfilled, (state, action) => {
                 state.createStatus = "success";
-                state.stateRefreshUsers = Math.random();
-                toast.success(`Register Berhasil`, {
+                state.stateRefreshRes = Math.random();
+                toast.success(`Berhasil membuat resupply`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -115,10 +115,10 @@ const sliceUsers = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(usersCreate.rejected, (state, action) => {
+            .addCase(resupplyCreate.rejected, (state, action) => {
                 state.status = "rejected";
                 state.errorMessage = action.payload;
-                toast.error(`Register Gagal: ${action.payload}`, {
+                toast.error(`Gagal membuat resupply: ${action.payload}`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -129,53 +129,54 @@ const sliceUsers = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(usersEdit.pending, (state, action) => {
+            .addCase(resupplyEdit.pending, (state, action) => {
                 state.editStatus = "pending";
             })
-            .addCase(usersEdit.fulfilled, (state, action) => {
+            .addCase(resupplyEdit.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const updatedUser = state.stateUsers.map((user) =>
-                        user.user_id === action.payload.user_id ? action.payload : user
+                    const updatedResupply = state.stateResupply.map((resupply) =>
+                        resupply.resupply_id === action.payload.resupply_id ? action.payload : resupply
                     );
-                    state.stateUsers = updatedUser;
+                    console.log(updatedResupply);
+                    state.stateResupply = updatedResupply;
                     state.editStatus = "success";
-                    state.stateRefreshUsers = Math.random();
-                    toast.info("User Telah Diedit!", {
+                    state.stateRefreshRes = Math.random();
+                    toast.info("Resupply Telah Diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("User Masih Digunakan!", {
+                    toast.error("Resupply Masih Digunakan!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(usersEdit.rejected, (state, action) => {
+            .addCase(resupplyEdit.rejected, (state, action) => {
                 state.editStatus = "rejected";
             })
-            .addCase(usersDelete.pending, (state, action) => {
+            .addCase(resupplyDelete.pending, (state, action) => {
                 state.deleteStatus = "pending";
             })
-            .addCase(usersDelete.fulfilled, (state, action) => {
+            .addCase(resupplyDelete.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const newList = state.stateUsers.filter(
-                        (item) => item.user_id !== action.payload.user_id
+                    const newList = state.stateResupply.filter(
+                        (item) => item.resupply_id !== action.payload.resupply_id
                     );
-                    state.stateUsers = newList;
+                    state.stateResupply = newList;
                     state.deleteStatus = "success";
-                    state.stateRefreshUsers = Math.random();
-                    toast.success("User Telah Dihapus!", {
+                    state.stateRefreshRes = Math.random();
+                    toast.success("Resupply Telah Dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("User Masih Digunakan!", {
+                    toast.error("Resupply Masih Digunakan!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(usersDelete.rejected, (state, action) => {
+            .addCase(resupplyDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
             });
     },
 });
 
-export default sliceUsers.reducer;
+export default sliceCategories.reducer;

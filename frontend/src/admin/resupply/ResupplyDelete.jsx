@@ -1,16 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { productsDelete } from "../../slices/sliceProducts";
+import { resupplyDelete } from "../../slices/sliceResupply";
 
-export default function ProductsDelete() {
+export default function ResupplyDelete() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { pId } = useParams();
-    const { deleteStatus } = useSelector((state) => state.products);
+    const { rId } = useParams();
+    const { deleteStatus } = useSelector((state) => state.resupply);
 
     const handleDelete = async () => {
-        dispatch(productsDelete(pId));
-        navigate("/admin/products")
+        dispatch(resupplyDelete(rId));
+        navigate("/admin/resupply")
     }
     return (
         <div className="flex items-center justify-center">
@@ -26,7 +26,7 @@ export default function ProductsDelete() {
                             </button>
                         </div>
                         <div className="flex w-[100%] h-[50px] mt-[15px]">
-                            <button onClick={() => navigate("/admin/products")} className="w-[100%] bg-gray-700 hover:bg-gray-600 active:bg-orange-600 active:scale-95 text-white font-bold px-2 rounded">
+                            <button onClick={() => navigate("/admin/resupply")} className="w-[100%] bg-gray-700 hover:bg-gray-600 active:bg-orange-600 active:scale-95 text-white font-bold px-2 rounded">
                                 Batal
                             </button>
                         </div>

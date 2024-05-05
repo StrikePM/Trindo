@@ -47,7 +47,7 @@ export default function ProductsCreate() {
         setBrandProducts("");
         setPriceProducts("");
         setDescriptionProducts("");
-        navigate("/products");
+        navigate("/admin/products");
     };
 
 

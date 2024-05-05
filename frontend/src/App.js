@@ -23,6 +23,15 @@ import BrandList from "./admin/brand/BrandList";
 import BrandCreate from "./admin/brand/BrandCreate";
 import BrandEdit from "./admin/brand/BrandEdit";
 import BrandDelete from "./admin/brand/BrandDelete";
+import Resupply from "./admin/resupply/Resupply";
+import ResupplyList from "./admin/resupply/ResupplyList";
+import ResupplyCreate from "./admin/resupply/ResupplyCreate";
+import ResupplyEdit from "./admin/resupply/ResupplyEdit";
+import ResupplyDelete from "./admin/resupply/ResupplyDelete";
+import Users from "./admin/users/Users";
+import UsersList from "./admin/users/UsersList";
+import UsersEdit from "./admin/users/UsersEdit";
+import UsersDelete from "./admin/users/UsersDelete";
 
 function App() {
   return (
@@ -52,6 +61,17 @@ function App() {
               <Route path="create-brand" element={<BrandCreate />} />
               <Route path="edit-brand/:bId" element={<BrandEdit />} />
               <Route path="delete-brand/:bId" element={<BrandDelete />} />
+            </Route>
+            <Route path="users" element={<Users />}>
+              <Route index element={<UsersList />} />
+              <Route path="edit-users/:uId" element={<UsersEdit />} />
+              <Route path="delete-users/:uId" element={<UsersDelete />} />
+            </Route>
+            <Route path="resupply" element={<Resupply />}>
+              <Route index element={<ResupplyList />} />
+              <Route path="create-resupply" element={<ResupplyCreate />} />
+              <Route path="edit-resupply/:rId" element={<ResupplyEdit />} />
+              <Route path="delete-resupply/:rId" element={<ResupplyDelete />} />
             </Route>
           </Route>
         </Routes>

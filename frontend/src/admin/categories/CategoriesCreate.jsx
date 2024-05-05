@@ -13,14 +13,15 @@ export default function CategroiesCreate() {
 
     const handleCreateCategories = async (e) => {
         e.preventDefault();
-        navigate("/admin/categories");
+        
         dispatch(categoriesCreate({
             categoryName: nameCategory,
             categoryDesc: descCategory,
         }));
 
         setNameCategory("");
-        setDescCategory("");  
+        setDescCategory(""); 
+        navigate("/admin/categories"); 
     };
 
     return (

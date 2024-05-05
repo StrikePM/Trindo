@@ -57,7 +57,7 @@ export default function ProductsEdit() {
                 image: savePicProducts,
             }
         }));
-        navigate("/products");
+        navigate("/admin/products");
     };
 
     return (

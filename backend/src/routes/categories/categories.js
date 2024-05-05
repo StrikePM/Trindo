@@ -91,7 +91,8 @@ router.delete('/categories/:id', verifyUser, isAdmin, async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
         const data = await conn.execute(`DELETE FROM categories WHERE category_id = ?`, [id])
-        var statusCode = 200, message = 'success';
+        let statusCode = 200 
+        let message = 'success'
         if (data[0].affectedRows > 0) {
             const tableName = 'categories';
             const columnName = 'category_id';
@@ -110,8 +111,9 @@ router.delete('/categories/:id', verifyUser, isAdmin, async (req, res) => {
             message
         })
     } catch (e) {
+        console.log(e);
         res.status(400).json({
-            statusCode: 400,
+            statusCode: 409,
             message: 'Have an error ' + e
         });
     } finally {

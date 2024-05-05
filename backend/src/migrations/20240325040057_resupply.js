@@ -7,6 +7,8 @@ export function up(knex) {
         table.increments('resupply_id').primary();
         table.integer('product_id').unsigned();
         table.integer('resupply_stock').notNullable();
+        table.integer('resupply_price').notNullable();
+        table.integer('resupply_total').notNullable();
         table.date('resupply_date').notNullable();
         table.foreign('product_id').references('product_id').inTable('products');
     })

@@ -90,7 +90,9 @@ router.delete('/brand/:id', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
     try {
         const id = parseInt(req.params.id, 10);
+        
         const data = await conn.execute(`DELETE FROM brand WHERE brand_id = ?`, [id])
+        
         var statusCode = 200, message = 'success';
         if (data[0].affectedRows > 0) {
             const tableName = 'brand';

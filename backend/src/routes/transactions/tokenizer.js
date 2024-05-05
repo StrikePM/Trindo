@@ -13,7 +13,7 @@ router.post('/transaction', verifyUser, async (req, res) => {
             serverKey: process.env.MIDTRANS_SERVER_KEY,
             clientKey: process.env.MIDTRANS_CLIENT_KEY
         })
-        const { transactionId, productName, productPrice, userEmail, userName, userPhone, userAddress, productId, transactionQty } = req.body;
+        const { transactionId, productName, productPrice, priceTotal, userEmail, userName, userPhone, userAddress, productId, transactionQty } = req.body;
         
         const parameter = {
             item_details: {

@@ -13,6 +13,8 @@ router.get('/resupply', verifyUser, isAdmin, async (req, res) => {
         b.product_id,
         b.product_name,
         a.resupply_stock,
+        a.resupply_price,
+        a.resupply_total,
         a.resupply_date
         FROM resupply a INNER JOIN products b 
         ON a.product_id = b.product_id 
@@ -34,10 +36,10 @@ router.post('/resupply', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
 
     try {
-        const { resupplyName, resupplyStock, resupplyDate } = req.body;
+        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate } = req.body;
         if(!resupplyName || !resupplyStock || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
 
-        const data = await conn.execute(`INSERT INTO resupply VALUES(DEFAULT,?,?,?)`, [resupplyName, resupplyStock, resupplyDate]);
+        const data = await conn.execute(`INSERT INTO resupply VALUES(DEFAULT,?,?,?,?,?)`, [resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate]);
         let statusCode = 200;
         let message = 'success';
         if (data[0] == 0) {
@@ -68,10 +70,10 @@ router.post('/resupply', verifyUser, isAdmin, async (req, res) => {
 router.put('/resupply/:id', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
     try {
-        const { resupplyName, resupplyStock, resupplyDate } = req.body;
+        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate } = req.body;
         const id = parseInt(req.params.id, 10);
 
-        if(!resupplyName || !resupplyStock || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
+        if(!resupplyName || !resupplyStock || !resupplyPrice || !resupplyTotal || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
 
         const getResupplyStock = await conn.execute(`SELECT resupply_stock FROM resupply WHERE resupply_id = ?`, [id]);
         const currentResupplyStock = getResupplyStock[0][0].resupply_stock;

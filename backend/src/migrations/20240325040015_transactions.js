@@ -8,6 +8,7 @@ export function up(knex) {
         table.integer('user_id').unsigned();
         table.integer('product_id').unsigned();
         table.integer('transaction_qty').notNullable();
+        table.integer('transaction_price').notNullable();
         table.integer('transaction_total').notNullable();
         table.date('transaction_date').notNullable();
         table.string('status').notNullable();

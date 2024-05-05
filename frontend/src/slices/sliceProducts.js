@@ -190,6 +190,9 @@ const sliceProducts = createSlice({
             })
             .addCase(productsDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.error("Product Masih Digunakan!", {
+                    position: "bottom-left",
+                });
             });
     },
 });

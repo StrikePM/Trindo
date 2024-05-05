@@ -36,6 +36,8 @@ export default function ResupplyList() {
                 id: item.resupply_id,
                 pName: item.product_name,
                 resStock: item.resupply_stock,
+                resPrice: item.resupply_price,
+                resTotal: item.resupply_total,
                 resDate: formatDate(item.resupply_date),
             };
         });
@@ -47,6 +49,8 @@ export default function ResupplyList() {
         { field: "id", headerName: "ID", width: 50 },
         { field: "pName", headerName: "Nama Produk", width: 120 },
         { field: "resStock", headerName: "Stok Resupply", width: 120 },
+        { field: "resPrice", headerName: "Unit Price", width: 120 },
+        { field: "resTotal", headerName: "Total Price", width: 120 },
         { field: "resDate", headerName: "Tanggal Resupply", width: 150 },
         {
             field: "actions",
@@ -77,7 +81,7 @@ export default function ResupplyList() {
             <DataGrid
                 rows={validRows}
                 columns={columns}
-                pageSize={5}
+                autoPageSize={true}
                 rowsPerPageOptions={[5]}
                 getRowHeight={() => 'auto'}
                 checkboxSelection

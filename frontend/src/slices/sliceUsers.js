@@ -140,11 +140,11 @@ const sliceUsers = createSlice({
                     state.stateUsers = updatedUser;
                     state.editStatus = "success";
                     state.stateRefreshUsers = Math.random();
-                    toast.info("User Telah Diedit!", {
+                    toast.info("User telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("User Masih Digunakan!", {
+                    toast.error("User gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
@@ -163,17 +163,20 @@ const sliceUsers = createSlice({
                     state.stateUsers = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshUsers = Math.random();
-                    toast.success("User Telah Dihapus!", {
+                    toast.success("User telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("User Masih Digunakan!", {
+                    toast.error("User gagal dihapus!", {
                         position: "bottom-left",
                     });
                 }
             })
             .addCase(usersDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.error(`User gagal dihapus: ${action.error.message}`, {
+                    position: "bottom-left",
+                });
             });
     },
 });

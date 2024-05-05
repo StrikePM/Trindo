@@ -31,7 +31,7 @@ export default function CategroiesEdit() {
                 categoryDesc: descCategory,
             }
         }));
-        navigate("/categories");
+        navigate("/admin/categories");
     };
 
     return (

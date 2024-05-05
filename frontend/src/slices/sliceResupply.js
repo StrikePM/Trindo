@@ -141,11 +141,11 @@ const sliceCategories = createSlice({
                     state.stateResupply = updatedResupply;
                     state.editStatus = "success";
                     state.stateRefreshRes = Math.random();
-                    toast.info("Resupply Telah Diedit!", {
+                    toast.info("Resupply telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Resupply Masih Digunakan!", {
+                    toast.error("Resupply gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
@@ -164,17 +164,20 @@ const sliceCategories = createSlice({
                     state.stateResupply = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshRes = Math.random();
-                    toast.success("Resupply Telah Dihapus!", {
+                    toast.success("Resupply telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Resupply Masih Digunakan!", {
+                    toast.error("Resupply gagal dihapus!", {
                         position: "bottom-left",
                     });
                 }
             })
             .addCase(resupplyDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.error(`Resupply gagal dihapus: ${action.error.message}`, {
+                    position: "bottom-left",
+                });
             });
     },
 });

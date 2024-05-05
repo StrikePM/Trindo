@@ -11,6 +11,8 @@ export default function ResupplyCreate() {
 
     const [nameProdResupply, setNameProdResupply] = useState("");
     const [stockResupply, setStockResupply] = useState("");
+    const [priceResupply, setPriceResupply] = useState("");
+    const [totalResupply, setTotalResupply] = useState("");
     const [dateResupply, setDateResupply] = useState("");
 
     const handleCreateResupply = async (e) => {
@@ -19,11 +21,15 @@ export default function ResupplyCreate() {
         dispatch(resupplyCreate({
             resupplyName: nameProdResupply,
             resupplyStock: stockResupply,
+            resupplyPrice: priceResupply,
+            resupplyTotal: totalResupply,
             resupplyDate: dateResupply,
         }));
 
         setNameProdResupply("");
         setStockResupply("");
+        setPriceResupply("");
+        setTotalResupply("");
         setDateResupply("");
         navigate("/admin/resupply");
     };
@@ -49,7 +55,7 @@ export default function ResupplyCreate() {
                             {/* memanggil isi dari kategori menggunakan state */}
                             {stateProducts && stateProducts.map((item) => (
                                 <option key={item.product_id} value={item.product_id}>
-                                    {item.product_name}
+                                    ({item.category_name}) {item.product_name}
                                 </option>
                             ))}
                         </select>
@@ -61,9 +67,35 @@ export default function ResupplyCreate() {
                         <input
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="number"
-                            placeholder="Isi Deskripsi Kategori"
+                            placeholder="Isi Stok Resupply"
                             value={stockResupply}
                             onChange={(e) => setStockResupply(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Unit Price :
+                        </label>
+                        <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="number"
+                            placeholder="Isi Harga Per Unit"
+                            value={priceResupply}
+                            onChange={(e) => setPriceResupply(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Total Price :
+                        </label>
+                        <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="number"
+                            placeholder="Isi Total Harga"
+                            value={totalResupply}
+                            onChange={(e) => setTotalResupply(e.target.value)}
                             required
                         />
                     </div>

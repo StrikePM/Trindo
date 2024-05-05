@@ -66,7 +66,7 @@ export default function CategoriesList() {
             <DataGrid
                 rows={validRows}
                 columns={columns}
-                pageSize={5}
+                autoPageSize={true}
                 rowsPerPageOptions={[5]}
                 getRowHeight={()=> 'auto'}
                 checkboxSelection

@@ -40,13 +40,13 @@ export default function ProductsList() {
     const columns = [
         { field: "id", headerName: "ID", width: 50 },
         { field: "pPic", headerName: "Gambar", width: 100, renderCell: (img) => <img className="w-[50px]" src={img.value} /> },
-        { field: "pName", headerName: "Nama", width: 80 },
+        { field: "pName", headerName: "Nama", width: 100 },
         { field: "pCat", headerName: "Kategori", width: 80 },
         { field: "pBrand", headerName: "Merk", width: 80 },
-        { field: "pPrice", headerName: "Harga", width: 80 },
+        { field: "pPrice", headerName: "Harga", width: 100 },
         { field: "pStock", headerName: "stok", width: 80 },
         { field: "pDesc", headerName: "Deskripsi", width: 150 },
-        { field: "pBrand", headerName: "Merk", width: 80 },
+        { field: "pBrand", headerName: "Merk", width: 100 },
         {
             field: "actions",
             headerName: "Actions",
@@ -76,7 +76,7 @@ export default function ProductsList() {
             <DataGrid
                 rows={validRows}
                 columns={columns}
-                pageSize={5}
+                autoPageSize={true}
                 rowsPerPageOptions={[5]}
                 getRowHeight={()=> 'auto'}
                 checkboxSelection

@@ -132,6 +132,16 @@ const sliceAuth = createSlice({
             })
             .addCase(sessionDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.success(`Gagal logout: ${action.error.message}`, {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
     },
 });

@@ -64,7 +64,7 @@ export default function BrandList() {
             <DataGrid
                 rows={validRows}
                 columns={columns}
-                pageSize={5}
+                autoPageSize={true}
                 rowsPerPageOptions={[5]}
                 getRowHeight={()=> 'auto'}
                 checkboxSelection

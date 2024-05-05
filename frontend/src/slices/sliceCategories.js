@@ -140,11 +140,11 @@ const sliceCategories = createSlice({
                     state.stateCategories = updatedCategory;
                     state.editStatus = "success";
                     state.stateRefreshCategories = Math.random();
-                    toast.info("Category Telah Diedit!", {
+                    toast.info("Kategori telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Category Masih Digunakan!", {
+                    toast.error("Kategori gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
@@ -163,17 +163,20 @@ const sliceCategories = createSlice({
                     state.stateCategories = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshCategories = Math.random();
-                    toast.success("Category Telah Dihapus!", {
+                    toast.success("Kategori telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Category Masih Digunakan!", {
+                    toast.error(`Kategori gagal dihapus`, {
                         position: "bottom-left",
                     });
                 }
             })
             .addCase(categoriesDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.error(`Kategori gagal dihapus: ${action.error.message}`, {
+                    position: "bottom-left",
+                });
             });
     },
 });

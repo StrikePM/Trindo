@@ -140,11 +140,11 @@ const sliceCategories = createSlice({
                     state.stateBrand = updatedBrand;
                     state.editStatus = "success";
                     state.stateRefreshBrand = Math.random();
-                    toast.info("Brand Telah Diedit!", {
+                    toast.info("Brand telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Brand Masih Digunakan!", {
+                    toast.error("Brand gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
@@ -163,17 +163,20 @@ const sliceCategories = createSlice({
                     state.stateBrand = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshBrand = Math.random();
-                    toast.success("Brand Telah Dihapus!", {
+                    toast.success("Brand telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Brand Masih Digunakan!", {
+                    toast.error("Brand gagal dihapus!", {
                         position: "bottom-left",
                     });
                 }
             })
             .addCase(brandDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+                toast.error(`Brand gagal dihapus: ${action.error.message}`, {
+                    position: "bottom-left",
+                });
             });
     },
 });

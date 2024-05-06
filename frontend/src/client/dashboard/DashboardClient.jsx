@@ -20,7 +20,7 @@ const DashboardClient = () => {
   }, [auth.status, navigate]);
   
   return (
-    <div className="fixed bg-gray-100 min-h-screen w-full">
+    <div className="bg-gray-100 h-fit w-full pt-[90px]">
       <Outlet />
     </div>
   );

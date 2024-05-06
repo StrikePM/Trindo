@@ -11,6 +11,7 @@ import productsReducer, { productsFetch } from "./slices/sliceProducts";
 import categoriesReducer, { categoriesFetch } from "./slices/sliceCategories";
 import brandReducer, { brandFetch } from "./slices/sliceBrand";
 import resupplyReducer, { resupplyFetch } from "./slices/sliceResupply";
+import transactionReducer, { transactionFetch } from "./slices/sliceTransaction";
 import usersReducer, { usersFetch } from "./slices/sliceUsers";
 import AuthReducer from "./slices/sliceAuth";
 
@@ -23,6 +24,7 @@ const store = configureStore({
     categories: categoriesReducer,
     brand: brandReducer,
     resupply: resupplyReducer,
+    transaction: transactionReducer,
     users: usersReducer,
   },
 });
@@ -31,6 +33,7 @@ store.dispatch(productsFetch());
 store.dispatch(categoriesFetch());  
 store.dispatch(brandFetch());  
 store.dispatch(resupplyFetch());  
+store.dispatch(transactionFetch());  
 store.dispatch(usersFetch());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

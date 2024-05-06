@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import { setHeaders, url } from './api';
 
 const initialState = {
-    stateResupply: [],
-    stateRefreshRes: null,
+    stateTransaction: [],
+    stateRefreshTrans: null,
     status: null,
     createStatus: null,
     editStatus: null,
@@ -14,11 +14,11 @@ const initialState = {
 };
 
 //fetch user
-export const resupplyFetch = createAsyncThunk(
-    "resupply/resupplyFetch",
+export const transactionFetch = createAsyncThunk(
+    "transaction/transactionFetch",
     async () => {
         try {
-            const response = await axios.get(`${url}/resupply`);
+            const response = await axios.get(`${url}/transaction`);
             return response.data;
         } catch (error) {
             throw error;
@@ -28,12 +28,12 @@ export const resupplyFetch = createAsyncThunk(
 );
 
 //create user
-export const resupplyCreate = createAsyncThunk(
-    "resupply/resupplyCreate",
+export const transactionCreate = createAsyncThunk(
+    "transaction/transactionCreate",
     async (values, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                `${url}/resupply`,
+                `${url}/transaction`,
                 values,
             );
             return response.data;
@@ -49,13 +49,13 @@ export const resupplyCreate = createAsyncThunk(
 );
 
 //edit user
-export const resupplyEdit = createAsyncThunk(
-    "resupply/resupplyEdit",
+export const transactionEdit = createAsyncThunk(
+    "transaction/transactionEdit",
     async (values) => {
         try {
             const response = await axios.put(
-                `${url}/resupply/${values.resupply.resupplyId}`,
-                values.resupply,
+                `${url}/transaction/${values.transaction.transactionId}`,
+                values.transaction,
             );
 
             return response.data;
@@ -66,12 +66,12 @@ export const resupplyEdit = createAsyncThunk(
 );
 
 //delete user
-export const resupplyDelete = createAsyncThunk(
-    "resupply/resupplyDelete",
-    async (resupplyId) => {
+export const transactionDelete = createAsyncThunk(
+    "transaction/transactionDelete",
+    async (transactionId) => {
         try {
             const response = await axios.delete(
-                `${url}/resupply/${resupplyId}`,
+                `${url}/transaction/${transactionId}`,
             );
 
             return response.data;
@@ -83,28 +83,28 @@ export const resupplyDelete = createAsyncThunk(
 
 //redux reducers atau pembuatan state untuk digunakan pada suatu komponen
 const sliceCategories = createSlice({
-    name: "resupply",
+    name: "transaction",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(resupplyFetch.pending, (state, action) => {
+            .addCase(transactionFetch.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(resupplyFetch.fulfilled, (state, action) => {
-                state.stateResupply = action.payload;
+            .addCase(transactionFetch.fulfilled, (state, action) => {
+                state.stateTransaction = action.payload;
                 state.status = "success";
             })
-            .addCase(resupplyFetch.rejected, (state, action) => {
+            .addCase(transactionFetch.rejected, (state, action) => {
                 state.status = "rejected";
             })
-            .addCase(resupplyCreate.pending, (state, action) => {
+            .addCase(transactionCreate.pending, (state, action) => {
                 state.status = "pending";
             })
-            .addCase(resupplyCreate.fulfilled, (state, action) => {
+            .addCase(transactionCreate.fulfilled, (state, action) => {
                 state.createStatus = "success";
-                state.stateRefreshRes = Math.random();
-                toast.success(`Berhasil membuat resupply`, {
+                state.stateRefreshTrans = Math.random();
+                toast.success(`Berhasil membuat transaction`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -115,10 +115,10 @@ const sliceCategories = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(resupplyCreate.rejected, (state, action) => {
+            .addCase(transactionCreate.rejected, (state, action) => {
                 state.status = "rejected";
                 state.errorMessage = action.payload;
-                toast.error(`Gagal membuat resupply: ${action.payload}`, {
+                toast.error(`Gagal membuat transaction: ${action.payload}`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -129,51 +129,51 @@ const sliceCategories = createSlice({
                     theme: "light",
                 });
             })
-            .addCase(resupplyEdit.pending, (state, action) => {
+            .addCase(transactionEdit.pending, (state, action) => {
                 state.editStatus = "pending";
             })
-            .addCase(resupplyEdit.fulfilled, (state, action) => {
+            .addCase(transactionEdit.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const updatedResupply = state.stateResupply.map((resupply) =>
-                        resupply.resupply_id === action.payload.resupply_id ? action.payload : resupply
+                    const updatedTransaction = state.stateTransaction.map((transaction) =>
+                        transaction.transaction_id === action.payload.transaction_id ? action.payload : transaction
                     );
-                    console.log(updatedResupply);
-                    state.stateResupply = updatedResupply;
+                    console.log(updatedTransaction);
+                    state.stateTransaction = updatedTransaction;
                     state.editStatus = "success";
-                    state.stateRefreshRes = Math.random();
-                    toast.info("Resupply Telah Diedit!", {
+                    state.stateRefreshTrans = Math.random();
+                    toast.info("Transaction telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Resupply Masih Digunakan!", {
+                    toast.error("Transaction gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(resupplyEdit.rejected, (state, action) => {
+            .addCase(transactionEdit.rejected, (state, action) => {
                 state.editStatus = "rejected";
             })
-            .addCase(resupplyDelete.pending, (state, action) => {
+            .addCase(transactionDelete.pending, (state, action) => {
                 state.deleteStatus = "pending";
             })
-            .addCase(resupplyDelete.fulfilled, (state, action) => {
+            .addCase(transactionDelete.fulfilled, (state, action) => {
                 if (action.payload) {
-                    const newList = state.stateResupply.filter(
-                        (item) => item.resupply_id !== action.payload.resupply_id
+                    const newList = state.stateTransaction.filter(
+                        (item) => item.transaction_id !== action.payload.transaction_id
                     );
-                    state.stateResupply = newList;
+                    state.stateTransaction = newList;
                     state.deleteStatus = "success";
-                    state.stateRefreshRes = Math.random();
-                    toast.success("Resupply Telah Dihapus!", {
+                    state.stateRefreshTrans = Math.random();
+                    toast.success("Transaction telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Resupply Masih Digunakan!", {
+                    toast.error("Transaction gagal dihapus!", {
                         position: "bottom-left",
                     });
                 }
             })
-            .addCase(resupplyDelete.rejected, (state, action) => {
+            .addCase(transactionDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
             });
     },

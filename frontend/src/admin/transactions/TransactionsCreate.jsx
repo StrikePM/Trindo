@@ -1,46 +1,48 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { resupplyCreate } from "../../slices/sliceResupply";
+import { transactionCreate } from "../../slices/sliceTransaction";
 
-export default function ResupplyCreate() {
+export default function TransactionsCreate() {
     const dispatch = useDispatch();
-    const { createStatus } = useSelector((state) => state.resupply);
+    const { createStatus } = useSelector((state) => state.transaction);
     const { stateProducts } = useSelector((state) => state.products);
+    const { stateAuth } = useSelector((state) => state.session);
     const navigate = useNavigate();
 
-    const [nameProdResupply, setNameProdResupply] = useState("");
-    const [stockResupply, setStockResupply] = useState("");
-    const [priceResupply, setPriceResupply] = useState("");
-    const [totalResupply, setTotalResupply] = useState("");
-    const [dateResupply, setDateResupply] = useState("");
-    const [statusResupply, setStatusResupply] = useState("");
+    const [nameProdTrans, setNameProdTrans] = useState("");
+    const [qtyTrans, setQtyTrans] = useState("");
+    const [priceTrans, setPriceTrans] = useState("");
+    const [totalTrans, setTotalTrans] = useState("");
+    const [dateTrans, setDateTrans] = useState("");
+    const [statusTrans, setStatusTrans] = useState("");
 
     const handleCreateResupply = async (e) => {
         e.preventDefault();
 
-        dispatch(resupplyCreate({
-            resupplyName: nameProdResupply,
-            resupplyStock: stockResupply,
-            resupplyPrice: priceResupply,
-            resupplyTotal: totalResupply,
-            resupplyDate: dateResupply,
-            resupplyStatus: statusResupply,
+        dispatch(transactionCreate({
+            transactionUser: stateAuth.user_id,
+            transactionProd: nameProdTrans,
+            transactionQty: qtyTrans,
+            transactionPrice: priceTrans,
+            transactionTotal: totalTrans,
+            transactionDate: dateTrans,
+            transactionStatus: statusTrans,
         }));
 
-        setNameProdResupply("");
-        setStockResupply("");
-        setPriceResupply("");
-        setTotalResupply("");
-        setDateResupply("");
-        setStatusResupply("");
-        navigate("/admin/resupply");
+        setNameProdTrans("");
+        setQtyTrans("");
+        setPriceTrans("");
+        setTotalTrans("");
+        setDateTrans("");
+        setStatusTrans("");
+        navigate("/admin/transactions");
     };
 
     return (
         <div className="grid grid-cols-2">
             <div className="w-[400px]">
-                <h1 className="font-bold text-xl mb-3">Membuat Resupply</h1>
+                <h1 className="font-bold text-xl mb-3">Membuat Transaction</h1>
                 <form onSubmit={handleCreateResupply}>
                     <div className="mb-3">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -48,7 +50,7 @@ export default function ResupplyCreate() {
                         </label>
                         <select
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            onChange={(e) => setNameProdResupply(e.target.value)}
+                            onChange={(e) => setNameProdTrans(e.target.value)}
                             required
                             defaultValue="cat"
                         >
@@ -65,14 +67,14 @@ export default function ResupplyCreate() {
                     </div>
                     <div className="mb-3">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Stock Resupply :
+                            Quantity :
                         </label>
                         <input
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="number"
-                            placeholder="Isi Stok Resupply"
-                            value={stockResupply}
-                            onChange={(e) => setStockResupply(e.target.value)}
+                            placeholder="Isi Kuantitas"
+                            value={qtyTrans}
+                            onChange={(e) => setQtyTrans(e.target.value)}
                             required
                         />
                     </div>
@@ -84,8 +86,8 @@ export default function ResupplyCreate() {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="number"
                             placeholder="Isi Harga Per Unit"
-                            value={priceResupply}
-                            onChange={(e) => setPriceResupply(e.target.value)}
+                            value={priceTrans}
+                            onChange={(e) => setPriceTrans(e.target.value)}
                             required
                         />
                     </div>
@@ -97,21 +99,21 @@ export default function ResupplyCreate() {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="number"
                             placeholder="Isi Total Harga"
-                            value={totalResupply}
-                            onChange={(e) => setTotalResupply(e.target.value)}
+                            value={totalTrans}
+                            onChange={(e) => setTotalTrans(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-3">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Tanggal Resupply :
+                            Tanggal Transaksi :
                         </label>
                         <input
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="date"
-                            placeholder="Isi Tanggal Resupply Produk"
-                            value={dateResupply}
-                            onChange={(e) => setDateResupply(e.target.value)}
+                            placeholder="Isi Tanggal Transaksi Produk"
+                            value={dateTrans}
+                            onChange={(e) => setDateTrans(e.target.value)}
                             required
                         />
                     </div>
@@ -121,15 +123,15 @@ export default function ResupplyCreate() {
                         </label>
                         <select
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            onChange={(e) => setStatusResupply(e.target.value)}
+                            onChange={(e) => setStatusTrans(e.target.value)}
                             required
                             defaultValue="cat"
                         >
                             <option value="cat" disabled hidden>
                                 Pilih Status
                             </option>
-                            <option value="selesai">
-                                Selesai
+                            <option value="po selesai">
+                                PO Selesai
                             </option>
                             <option value="pending">
                                 Pending

@@ -32,6 +32,12 @@ import Users from "./admin/users/Users";
 import UsersList from "./admin/users/UsersList";
 import UsersEdit from "./admin/users/UsersEdit";
 import UsersDelete from "./admin/users/UsersDelete";
+import Transactions from "./admin/transactions/Transactions";
+import TransactionsList from "./admin/transactions/TransactionsList";
+import TransactionsCreate from "./admin/transactions/TransactionsCreate";
+import TransactionsEdit from "./admin/transactions/TransactionsEdit";
+import TransactionsDelete from "./admin/transactions/TransactionsDelete";
+import Homepage from "./client/dashboard/Homepage";
 
 function App() {
   return (
@@ -40,7 +46,9 @@ function App() {
         <ToastContainer />
         <NavBar />
         <Routes>
-          <Route path="/" element={<DashboardClient />} />
+          <Route path="/" element={<DashboardClient />}>
+            <Route index element={<Homepage />} />
+          </Route>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<DashboardAdmin />}>
@@ -72,6 +80,12 @@ function App() {
               <Route path="create-resupply" element={<ResupplyCreate />} />
               <Route path="edit-resupply/:rId" element={<ResupplyEdit />} />
               <Route path="delete-resupply/:rId" element={<ResupplyDelete />} />
+            </Route>
+            <Route path="transactions" element={<Transactions />}>
+              <Route index element={<TransactionsList />} />
+              <Route path="create-transaction" element={<TransactionsCreate />} />
+              <Route path="edit-transaction/:tId" element={<TransactionsEdit />} />
+              <Route path="delete-transaction/:tId" element={<TransactionsDelete />} />
             </Route>
           </Route>
         </Routes>

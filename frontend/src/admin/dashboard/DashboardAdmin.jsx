@@ -28,7 +28,7 @@ const DashboardAdmin = () => {
   console.log(auth.stateAuth.user_role);
 
   return (
-    <div className="flex w-[100%]">
+    <div className="flex w-[100%] h-[100%] pt-[90px]">
       <SideBar />
       <div className="flex w-[100%] pl-[300px] py-[30px] pr-[30px]">
         <Outlet />

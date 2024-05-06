@@ -2,14 +2,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { resupplyFetch } from "../../slices/sliceResupply";
+import { transactionFetch } from "../../slices/sliceTransaction";
 
-export default function ResupplyList() {
+export default function TransactionsList() {
     const dispatch = useDispatch();
 
-    const { stateResupply, stateRefreshRes } = useSelector((state) => state.resupply); //deklarasi state yang diambil dari sliceResupply.js
+    const { stateTransaction, stateRefreshTrans } = useSelector((state) => state.transaction); //deklarasi state yang diambil dari sliceRransaction.js
     const navigate = useNavigate();
-    
+    console.log(stateTransaction);
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -25,21 +25,21 @@ export default function ResupplyList() {
     }
 
     useEffect(() => {
-        dispatch(resupplyFetch());
-    }, [stateRefreshRes]);
+        dispatch(transactionFetch());
+    }, [stateRefreshTrans]);
 
     // mengeluarkan isi data dari dalam state produk
     const rows =
-        stateResupply &&
-        stateResupply.map((item) => {
+        stateTransaction &&
+        stateTransaction.map((item) => {
             return {
-                id: item.resupply_id,
+                id: item.transaction_id,
                 pName: item.product_name,
-                resStock: item.resupply_stock,
-                resPrice: item.resupply_price,
-                resTotal: item.resupply_total,
-                resDate: formatDate(item.resupply_date),
-                resStatus: item.resupply_status,
+                tQty: item.transaction_qty,
+                tPrice: item.transaction_price,
+                tTotal: item.transaction_total,
+                tDate: formatDate(item.transaction_date),
+                tStatus: item.transaction_status,
             };
         });
     // new Date(new Date(item.created_at).getTime() + 7 * 60 * 60 * 1000).toISOString().split('T')[0]
@@ -49,11 +49,11 @@ export default function ResupplyList() {
     const columns = [
         { field: "id", headerName: "ID", width: 50 },
         { field: "pName", headerName: "Nama Produk", width: 120 },
-        { field: "resStock", headerName: "Stok Resupply", width: 120 },
-        { field: "resPrice", headerName: "Unit Price", width: 120 },
-        { field: "resTotal", headerName: "Total Price", width: 120 },
-        { field: "resDate", headerName: "Tanggal Resupply", width: 150 },
-        { field: "resStatus", headerName: "Status Resupply", width: 150 },
+        { field: "tQty", headerName: "Qty Transaksi", width: 120 },
+        { field: "tPrice", headerName: "Unit Price", width: 90 },
+        { field: "tTotal", headerName: "Total Price", width: 90 },
+        { field: "tDate", headerName: "Tanggal Transaksi", width: 140 },
+        { field: "tStatus", headerName: "Status Transaksi", width: 140 },
         {
             field: "actions",
             headerName: "Actions",
@@ -62,10 +62,10 @@ export default function ResupplyList() {
                 const rId = params.row.id;
                 return (
                     <div className="m-2">
-                        <button onClick={() => navigate(`edit-resupply/${rId}`)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-[15px]">
+                        <button onClick={() => navigate(`edit-transaction/${rId}`)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-[15px]">
                             Edit
                         </button>
-                        <button onClick={() => navigate(`delete-resupply/${rId}`)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <button onClick={() => navigate(`delete-transaction/${rId}`)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             Delete
                         </button>
                     </div>
@@ -76,9 +76,9 @@ export default function ResupplyList() {
 
     return (
         <div style={{ height: 400, width: "100%" }}>
-            <h1 className="font-bold text-xl">Products List</h1>
-            <button onClick={() => navigate(`create-resupply`)} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 rounded my-[10px]" >
-                Create New Resupply
+            <h1 className="font-bold text-xl">Transactions List</h1>
+            <button onClick={() => navigate(`create-transaction`)} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 rounded my-[10px]" >
+                Create New Transaction
             </button>
             <DataGrid
                 rows={validRows}

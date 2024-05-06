@@ -43,6 +43,8 @@ export default function ResupplyEdit() {
 
         setNameProdResupply("");
         setStockResupply("");
+        setPriceResupply("");
+        setTotalResupply("");
         setDateResupply("");
         navigate("/admin/resupply");
     };
@@ -52,7 +54,7 @@ export default function ResupplyEdit() {
             <div className="w-[400px]">
                 <h1 className="font-bold text-xl mb-3">Membuat Resupply</h1>
                 <form onSubmit={handleCreateResupply}>
-                <div className="mb-3">
+                    <div className="mb-3">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Nama Produk :
                         </label>

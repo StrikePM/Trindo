@@ -11,7 +11,7 @@ export function up(knex) {
         table.integer('transaction_price').notNullable();
         table.integer('transaction_total').notNullable();
         table.date('transaction_date').notNullable();
-        table.string('status').notNullable();
+        table.string('transaction_status').notNullable();
         table.foreign('user_id').references('user_id').inTable('users');
         table.foreign('product_id').references('product_id').inTable('products');
     })

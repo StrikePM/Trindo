@@ -15,7 +15,8 @@ router.get('/resupply', verifyUser, isAdmin, async (req, res) => {
         a.resupply_stock,
         a.resupply_price,
         a.resupply_total,
-        a.resupply_date
+        a.resupply_date,
+        a.resupply_status
         FROM resupply a INNER JOIN products b 
         ON a.product_id = b.product_id 
         ORDER BY a.resupply_id`);
@@ -36,10 +37,15 @@ router.post('/resupply', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
 
     try {
-        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate } = req.body;
+        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus } = req.body;
         if(!resupplyName || !resupplyStock || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
-
-        const data = await conn.execute(`INSERT INTO resupply VALUES(DEFAULT,?,?,?,?,?)`, [resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate]);
+        console.log(resupplyName);
+        console.log(resupplyStock);
+        console.log(resupplyPrice);
+        console.log(resupplyTotal);
+        console.log(resupplyDate);
+        console.log(resupplyStatus);
+        const data = await conn.execute(`INSERT INTO resupply VALUES(DEFAULT,?,?,?,?,?,?)`, [resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus]);
         let statusCode = 200;
         let message = 'success';
         if (data[0] == 0) {
@@ -70,10 +76,10 @@ router.post('/resupply', verifyUser, isAdmin, async (req, res) => {
 router.put('/resupply/:id', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
     try {
-        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate } = req.body;
+        const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus } = req.body;
         const id = parseInt(req.params.id, 10);
 
-        if(!resupplyName || !resupplyStock || !resupplyPrice || !resupplyTotal || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
+        if(!resupplyName || !resupplyStock || !resupplyPrice || !resupplyTotal || !resupplyDate || !resupplyStatus) return res.status(204).json({msg: 'field kosong'});
 
         const getResupplyStock = await conn.execute(`SELECT resupply_stock FROM resupply WHERE resupply_id = ?`, [id]);
         const currentResupplyStock = getResupplyStock[0][0].resupply_stock;
@@ -83,8 +89,8 @@ router.put('/resupply/:id', verifyUser, isAdmin, async (req, res) => {
         const newCurrentStock = parseInt(currentProductStock, 10) - parseInt(currentResupplyStock, 10);
         
 
-        const data = await conn.execute(`UPDATE resupply SET product_id =?, resupply_stock=?, resupply_date=? WHERE resupply_id = ?`,
-            [resupplyName, resupplyStock, resupplyDate, id]);
+        const data = await conn.execute(`UPDATE resupply SET product_id =?, resupply_stock=?, resupply_date=?, resupply_status=? WHERE resupply_id = ?`,
+            [resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus]);
         let statusCode = 200;
         let message = 'success';
         if (data[0] == 0) {

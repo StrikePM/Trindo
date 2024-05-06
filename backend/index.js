@@ -10,6 +10,7 @@ import ProductsRoute from './src/routes/products/products.js';
 import CategoriesRoute from './src/routes/categories/categories.js';
 import BrandRoute from './src/routes/brand/brand.js';
 import ResupplyRoute from './src/routes/resupply/resupply.js';
+import TransactionRoute from './src/routes/transactions/tokenizer.js';
 import UsersRoute from './src/routes/users/users.js';
 import AuthRoute from './src/routes/users/auth.js';
 
@@ -56,6 +57,7 @@ app.use("/api", ProductsRoute);
 app.use("/api", CategoriesRoute);
 app.use("/api", BrandRoute);
 app.use("/api", ResupplyRoute);
+app.use("/api", TransactionRoute);
 app.use("/api", UsersRoute);
 app.use("/api", AuthRoute);
 

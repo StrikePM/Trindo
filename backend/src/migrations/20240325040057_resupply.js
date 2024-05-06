@@ -10,6 +10,7 @@ export function up(knex) {
         table.integer('resupply_price').notNullable();
         table.integer('resupply_total').notNullable();
         table.date('resupply_date').notNullable();
+        table.string('resupply_status').notNullable();
         table.foreign('product_id').references('product_id').inTable('products');
     })
 }

@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(upload.array());
 
-router.get('/categories', verifyUser, isAdmin, async (req, res) => {
+router.get('/categories', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
         const data = await conn.execute(`

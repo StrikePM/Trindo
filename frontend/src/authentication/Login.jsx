@@ -42,19 +42,10 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed bg-gray-100 min-h-screen w-full flex justify-center items-center">
+    <div className="fixed bg-white min-h-screen w-full flex justify-center items-center mt-[90px]">
       <div className="w-full max-w-md rounded-lg shadow-xl bg-gray-100 mb-[150px]">
-        {/* Background Image */}
-        {/* <div
-          className="bg-cover bg-center h-32 mb-6 rounded-lg"
-          style={{
-            backgroundImage: ``,
-            opacity: 0.8, // Adjust the opacity as needed
-          }}
-        ></div> */}
-
         {/* Login Form */}
-        <div className="bg-white rounded-lg p-6 text-dark">
+        <div className="bg-white rounded-lg p-6 text-dark border-gray-200 border-[1px]">
           <h2 className="text-2xl font-semibold text-center mb-4 font-sans">Log in to your account</h2>
           <form className="flex flex-col space-y-[20px]" onSubmit={handleSubmit}>
             <div className="relative">

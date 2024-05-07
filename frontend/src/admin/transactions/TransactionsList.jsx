@@ -36,8 +36,8 @@ export default function TransactionsList() {
                 id: item.transaction_id,
                 pName: item.product_name,
                 tQty: item.transaction_qty,
-                tPrice: item.transaction_price,
-                tTotal: item.transaction_total,
+                tPrice: item.transaction_price.toLocaleString(),
+                tTotal: item.transaction_total.toLocaleString(),
                 tDate: formatDate(item.transaction_date),
                 tStatus: item.transaction_status,
             };
@@ -50,8 +50,8 @@ export default function TransactionsList() {
         { field: "id", headerName: "ID", width: 50 },
         { field: "pName", headerName: "Nama Produk", width: 120 },
         { field: "tQty", headerName: "Qty Transaksi", width: 120 },
-        { field: "tPrice", headerName: "Unit Price", width: 90 },
-        { field: "tTotal", headerName: "Total Price", width: 90 },
+        { field: "tPrice", headerName: "Unit Price (Rp.)", width: 120 },
+        { field: "tTotal", headerName: "Total Price (Rp.)", width: 120 },
         { field: "tDate", headerName: "Tanggal Transaksi", width: 140 },
         { field: "tStatus", headerName: "Status Transaksi", width: 140 },
         {

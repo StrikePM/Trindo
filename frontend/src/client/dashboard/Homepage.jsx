@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoriesFetch } from "../../slices/sliceCategories";
 import { productsFetch } from "../../slices/sliceProducts";
+import { useNavigate } from "react-router-dom";
 
 export default function Homepage(c) {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { stateCategories, stateRefreshCategories } = useSelector((state) => state.categories);
     const { stateProducts, stateRefreshProd } = useSelector((state) => state.products);
 
@@ -14,9 +16,9 @@ export default function Homepage(c) {
     useEffect(() => {
         dispatch(categoriesFetch());
         dispatch(productsFetch());
-    }, [dispatch]);
+    }, [selectedCategory]);
 
-    const filteredProducts = stateProducts.filter((product) => {
+    const filteredProducts = stateProducts && stateProducts.filter((product) => {
         // Filter by category name
         if (selectedCategory && product.category_id !== selectedCategory) {
             return false;
@@ -190,18 +192,18 @@ export default function Homepage(c) {
                     </div>
                 </div>
                 <div className="flex flex-row w-full h-[85%] items-center px-[20px] pb-[10px] overflow-auto">
-                    {filteredProducts.map((item) => (
+                    {filteredProducts && filteredProducts.map((item) => (
                         <div className="flex flex-col w-[200px] h-[280px] rounded-md mx-[10px] border-gray-100 border-[1px] shadow-md">
                             <div className="w-[199px] h-[50%] border-b-[1px]">
                                 <img className="w-full h-full object-fill rounded-t-lg" src={item.product_image} alt="" />
                             </div>
-                            <div className="flex flex-col w-full h-[30%] items-center justify-center">
+                            <div className="flex flex-col w-full h-[30%] items-center justify-center p-[10px]">
                                 <span className="min-w-0 max-w-[85%] text-lg font-bold truncate">Rp{item.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                                 <span className="min-w-0 max-w-[85%] text-sm truncate">{item.category_name}</span>
                                 <span className="min-w-0 max-w-[85%] text-xs truncate">{item.product_name}</span>
                             </div>
                             <div className="flex w-full h-[20%] items-center justify-center p-[10px]">
-                                <button onClick="#" className="w-full h-full bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded" >
+                                <button onClick={() => navigate(`/detail/${item.product_id}`)} className="w-full h-full bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded" >
                                     Detail
                                 </button>
                             </div>

@@ -39,12 +39,7 @@ router.post('/resupply', verifyUser, isAdmin, async (req, res) => {
     try {
         const { resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus } = req.body;
         if(!resupplyName || !resupplyStock || !resupplyDate) return res.status(204).json({msg: 'field kosong'});
-        console.log(resupplyName);
-        console.log(resupplyStock);
-        console.log(resupplyPrice);
-        console.log(resupplyTotal);
-        console.log(resupplyDate);
-        console.log(resupplyStatus);
+        
         const data = await conn.execute(`INSERT INTO resupply VALUES(DEFAULT,?,?,?,?,?,?)`, [resupplyName, resupplyStock, resupplyPrice, resupplyTotal, resupplyDate, resupplyStatus]);
         let statusCode = 200;
         let message = 'success';

@@ -72,7 +72,7 @@ router.post('/products', verifyUser, isAdmin, upload.single('image'), async (req
                 return res.status(500).json({
                     success: false,
                     message: "Error uploading image"
-                });
+                }); 
             }
 
             // Insert product ke database menggunakan image URL

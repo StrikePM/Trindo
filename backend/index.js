@@ -13,6 +13,8 @@ import ResupplyRoute from './src/routes/resupply/resupply.js';
 import TransactionRoute from './src/routes/transactions/tokenizer.js';
 import UsersRoute from './src/routes/users/users.js';
 import AuthRoute from './src/routes/users/auth.js';
+import MiatkWrenchRoute from './src/routes/spk/miatk_wrench.js';
+import RankWrenchRoute from './src/routes/spk/rank_wrench.js';
 
 const port = process.env.APP_PORT;
 const app = express();
@@ -60,6 +62,8 @@ app.use("/api", ResupplyRoute);
 app.use("/api", TransactionRoute);
 app.use("/api", UsersRoute);
 app.use("/api", AuthRoute);
+app.use("/api", MiatkWrenchRoute);
+app.use("/api", RankWrenchRoute);
 
 store.sync();
 

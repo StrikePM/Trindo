@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { miatkWrenchCreate, miatkWrenchDelete } from "../../slices/sliceMiatk";
 
 export default function SpkList() {
     const dispatch = useDispatch();
@@ -8,6 +9,7 @@ export default function SpkList() {
     const { stateCategories } = useSelector((state) => state.categories);
     const { stateTransaction } = useSelector((state) => state.transaction);
     const { stateResupply } = useSelector((state) => state.resupply);
+
     const navigate = useNavigate();
 
     const [miatk, setMiatk] = useState([]);
@@ -21,7 +23,9 @@ export default function SpkList() {
             const element = selectedProdByCat[i];
 
             //pengelompokan data
+            const idP = element.product_id;
             const namaP = element.product_name;
+            const kategoriP = element.category_id;
             const hargaJualP = element.product_price;
             const selectedProdByResupply = stateResupply.filter((item) => item.product_id == element.product_id).length > 0 ? stateResupply.filter((item) => item.product_id == element.product_id) : false;
             const hargaBeliP = selectedProdByResupply != false ? selectedProdByResupply.find((item) => item.resupply_id).resupply_price : element.product_price / (1 + 0.5);
@@ -102,7 +106,9 @@ export default function SpkList() {
 
             //memasukan iterasi for kedalam state array
             matrikWrench.push({
+                pId: idP,
                 pName: namaP,
+                pCategory: kategoriP,
                 pSalePrice: salePrice,
                 pBuyPrice: buyPrice,
                 pStock: stock,
@@ -115,6 +121,21 @@ export default function SpkList() {
 
     const handleMiatk = async () => {
         console.log(miatk);
+        await dispatch(miatkWrenchDelete());
+        for (let i = 0; i < miatk.length; i++) {
+            const element = miatk[i];
+            await dispatch(miatkWrenchCreate({
+                productId: element.pId,
+                productName: element.pName,
+                productCategory: element.pCategory,
+                productSalePrice: element.pSalePrice,
+                productBuyPrice: element.pBuyPrice,
+                productStock: element.pStock,
+                productSaleAmount: element.pSaleAmount,
+                productBuyAmount: element.pBuyAmount
+            }));
+        }
+        navigate('/admin');
     }
 
     return (
@@ -146,7 +167,6 @@ export default function SpkList() {
                     Perbandingan Alternatif Terhadap Kriteria
                 </button>
             </div>
-
         </div>
     );
 }

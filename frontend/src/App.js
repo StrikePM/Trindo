@@ -41,6 +41,7 @@ import Homepage from "./client/dashboard/Homepage";
 import DetailPage from "./client/dashboard/DetailPage";
 import Spk from "./admin/spk/Spk";
 import SpkList from "./admin/spk/SpkList";
+import SpkNpk from "./admin/spk/SpkNpk";
 
 function App() {
   return (
@@ -93,6 +94,12 @@ function App() {
             </Route>
             <Route path="spk" element={<Spk />}>
               <Route index element={<SpkList />} />
+              <Route path="create-transaction" element={<TransactionsCreate />} />
+              <Route path="edit-transaction/:tId" element={<TransactionsEdit />} />
+              <Route path="delete-transaction/:tId" element={<TransactionsDelete />} />
+            </Route>
+            <Route path="spkNpk" element={<Spk />}>
+              <Route index element={<SpkNpk />} />
               <Route path="create-transaction" element={<TransactionsCreate />} />
               <Route path="edit-transaction/:tId" element={<TransactionsEdit />} />
               <Route path="delete-transaction/:tId" element={<TransactionsDelete />} />

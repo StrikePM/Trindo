@@ -14,6 +14,8 @@ import resupplyReducer, { resupplyFetch } from "./slices/sliceResupply";
 import transactionReducer, { transactionFetch } from "./slices/sliceTransaction";
 import usersReducer, { usersFetch } from "./slices/sliceUsers";
 import AuthReducer from "./slices/sliceAuth";
+import miatkWrenchReducer, { miatkWrenchFetch } from './slices/sliceMiatk';
+import rankWrenchReducer, { rankWrenchFetch } from './slices/sliceRankWrench';
 
 axios.defaults.withCredentials = true;
 
@@ -26,6 +28,8 @@ const store = configureStore({
     resupply: resupplyReducer,
     transaction: transactionReducer,
     users: usersReducer,
+    miatkWrench: miatkWrenchReducer,
+    rankWrench: rankWrenchReducer
   },
 });
 
@@ -35,6 +39,8 @@ store.dispatch(brandFetch());
 store.dispatch(resupplyFetch());  
 store.dispatch(transactionFetch());  
 store.dispatch(usersFetch());
+store.dispatch(miatkWrenchFetch());
+store.dispatch(rankWrenchFetch());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

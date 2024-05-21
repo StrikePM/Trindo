@@ -4,11 +4,11 @@ import { isAdmin, verifyUser } from '../../middleware/authUser.js';
 
 const router = express.Router();
 
-router.get('/rankWrench', verifyUser, async (req, res) => {
+router.get('/rankHammer', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
         const data = await conn.execute(`
-        SELECT * FROM rank_wrench ORDER BY alternatif_id`);
+        SELECT * FROM rank_hammer ORDER BY alternatif_id`);
         res.status(200).json(data[0]);
     } catch (error) {
         res.status(400).json({
@@ -22,14 +22,14 @@ router.get('/rankWrench', verifyUser, async (req, res) => {
     }
 })
 
-router.post('/rankWrench', verifyUser, isAdmin, async (req, res) => {
+router.post('/rankHammer', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
 
     try {
         const { productId, productCategory, netFlow } = req.body;        
         // if(!productId || !productCategory || !netFlow) return res.status(204).json({msg: 'field kosong'});
         
-        const data = await conn.execute(`INSERT INTO rank_wrench VALUES(DEFAULT,?,?,?)`, [productId, productCategory, netFlow]);
+        const data = await conn.execute(`INSERT INTO rank_hammer VALUES(DEFAULT,?,?,?)`, [productId, productCategory, netFlow]);
         let statusCode = 200;
         let message = 'success';
         if (data[0] == 0) {
@@ -52,13 +52,13 @@ router.post('/rankWrench', verifyUser, isAdmin, async (req, res) => {
     }
 });
 
-router.delete('/rankWrench', verifyUser, isAdmin, async (req, res) => {
+router.delete('/rankHammer', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
     try {
-        const data = await conn.execute(`DELETE FROM rank_wrench`)
+        const data = await conn.execute(`DELETE FROM rank_hammer`)
         var statusCode = 200, message = 'success';
         if (data[0].affectedRows > 0) {
-            const tableName = 'rank_wrench';
+            const tableName = 'rank_hammer';
             // const columnName = 'alternatif_id';
             // const maxIdQuery = `SELECT COALESCE(MAX(${columnName}), 0) + 1 AS max_id FROM ${tableName}`;
             // const [maxIdData] = await conn.execute(maxIdQuery);

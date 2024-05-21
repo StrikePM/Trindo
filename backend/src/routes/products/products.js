@@ -6,27 +6,7 @@ import { isAdmin, verifyUser } from '../../middleware/authUser.js';
 
 const router = express.Router();
 
-// router.post('/upload', upload.single('image'), function (req, res) {
-//     cloudinary.uploader.upload(req.file.path, { folder: "Trindo" }, function (err, result) {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({
-//                 success: false,
-//                 message: "Error"
-//             })
-//         }
-
-//         console.log(result.url);
-//         res.status(200).json({
-//             success: true,
-//             message: "Uploaded!",
-//             data: result
-//         })
-//     })
-// });
-
-
-router.get('/products', verifyUser, isAdmin, async (req, res) => {
+router.get('/products', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
         const data = await conn.execute(`

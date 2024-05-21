@@ -117,6 +117,7 @@ export default function SpkList() {
             });
         }
         setMiatk(matrikWrench);
+        console.log(matrikWrench);
     };
 
     const handleMiatk = async () => {

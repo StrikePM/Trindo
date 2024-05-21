@@ -1,12 +1,25 @@
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { addToCart } from "../../slices/sliceCart";
 
 export default function DetailPage() {
     const { stateProducts } = useSelector((state) => state.products);
     const { spId } = useParams();
 
-    const selectedProd = stateProducts.find((item)=>item.product_id == parseInt(spId, 10));
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const selectedProd = stateProducts.find((item) => item.product_id == parseInt(spId, 10));
     console.log(selectedProd);
+
+    const handleAddToCart = () => {
+        const addedProd = {
+            ...selectedProd,
+        };
+        dispatch(addToCart(addedProd));
+        navigate("/cart");
+    };
+
     return (
         <div className="flex bg-white w-full h-full items-center justify-center py-[40px]">
             <div className="flex flex-col w-[900px] h-[600px] rounded-md overflow-hidden border-gray-200 border-[1px] shadow-md">
@@ -25,7 +38,7 @@ export default function DetailPage() {
                 </div>
                 <div className="w-full h-[15%] border-t-[1px]">
                     <div className="flex w-full h-full items-center justify-center p-[20px]">
-                        <button className="w-full h-full bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded">Masukan Keranjang</button>
+                        <button onClick={() => handleAddToCart()} className="w-full h-full bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded">Masukan Keranjang</button>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,11 @@ const NavBar = () => {
         dispatch(meFetch());
     }, [dispatch]);
 
+    const handleCartPage = (e) => {
+        e.preventDefault();
+        navigate("/cart");
+    }
+
     const handleAdminPage = (e) => {
         e.preventDefault();
         navigate("/admin/products");
@@ -35,6 +40,11 @@ const NavBar = () => {
                     <ul className="font-medium flex flex-col p-4 md:p-0  border border-gray-100 rounded-lg bg-transparent md:flex-row md:space-x-8 md:mt-0 md:border-0">
                         {auth.status == "success" && auth.stateAuth.user_role == "admin" ? (
                             <div className="flex flex-row">
+                                <li className="mr-[15px]">
+                                    <button type="button" onClick={handleCartPage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
+                                        Cart
+                                    </button>
+                                </li>
                                 <li className="mr-[15px]">
                                     <button type="button" onClick={handleAdminPage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
                                         Admin
@@ -64,11 +74,18 @@ const NavBar = () => {
                                 </li>
                             </div>
                         ) : (
-                            <li>
-                                <button type="button" onClick={handleLogout} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
-                                    Logout
-                                </button>
-                            </li>
+                            <div className="flex flex-row">
+                                <li className="mr-[15px]">
+                                    <button type="button" onClick={handleCartPage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
+                                        Cart
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" onClick={handleLogout} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
+                                        Logout
+                                    </button>
+                                </li>
+                            </div>
                         )}
                     </ul>
                 </div>

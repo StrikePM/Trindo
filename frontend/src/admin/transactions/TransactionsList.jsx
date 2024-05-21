@@ -76,7 +76,7 @@ export default function TransactionsList() {
 
     return (
         <div style={{ height: 400, width: "100%" }}>
-            <h1 className="font-bold text-xl">Transactions List</h1>
+            <h1 className="font-bold text-xl">Transaction List</h1>
             <button onClick={() => navigate(`create-transaction`)} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 rounded my-[10px]" >
                 Create New Transaction
             </button>

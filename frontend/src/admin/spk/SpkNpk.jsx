@@ -4,11 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { miatkWrenchFetch } from "../../slices/sliceMiatk";
 import { npkWrenchCreate, npkWrenchDelete, rankWrenchCreate, rankWrenchDelete } from "../../slices/sliceRankWrench";
+import { rankHammerCreate, rankHammerDelete } from "../../slices/sliceRankHammer";
+import { rankDrillCreate, rankDrillDelete } from "../../slices/sliceRankDrill";
+import { rankGrinderCreate, rankGrinderDelete } from "../../slices/sliceRankGrinder";
 
 export default function SpkNpk() {
     const dispatch = useDispatch();
     const { stateMiatkWrench } = useSelector((state) => state.miatkWrench);
-    const { stateCategories } = useSelector((state) => state.categories);
+    const { stateRankWrench } = useSelector((state) => state.rankWrench);
+    const { stateRankHammer } = useSelector((state) => state.rankHammer);
+    const { stateRankDrill } = useSelector((state) => state.rankDrill);
+    const { stateRankGrinder } = useSelector((state) => state.rankGrinder);
+    const { stateProducts } = useSelector((state) => state.products);
     const navigate = useNavigate();
 
     const [nilaiPreferensiKriteria, setNilaiPreferensiKriteria] = useState([]);
@@ -28,6 +35,8 @@ export default function SpkNpk() {
     const [columnEf, setColumnEf] = useState([]);
     const [rowNf, setRowNf] = useState([]);
     const [columnNf, setColumnNf] = useState([]);
+    const [rowRank, setRowRank] = useState([]);
+    const [columnRank, setColumnRank] = useState([]);
 
     useEffect(() => {
         dispatch(miatkWrenchFetch());
@@ -42,62 +51,28 @@ export default function SpkNpk() {
             for (let j = 0; j < stateMiatkWrench.length; j++) {
                 const ej = stateMiatkWrench[j];
 
-                let salePrice = 0;
-                let buyPrice = 0;
-                let stock = 0;
-                let saleAmount = 0;
-                let buyAmount = 0;
+                let salePrice = parseInt(ei.harga_jual_produk, 10) - parseInt(ej.harga_jual_produk, 10);
+                let buyPrice = parseInt(ei.harga_beli_produk, 10) - parseInt(ej.harga_beli_produk, 10);
+                let stock = parseInt(ei.stok_produk, 10) - parseInt(ej.stok_produk, 10);
+                let saleAmount = parseInt(ei.jumlah_penjualan_produk, 10) - parseInt(ej.jumlah_penjualan_produk, 10);
+                let buyAmount = parseInt(ei.jumlah_pembelian_produk, 10) - parseInt(ej.jumlah_pembelian_produk, 10);
 
-                salePrice = parseInt(ei.harga_jual_produk, 10) - parseInt(ej.harga_jual_produk, 10);
-                if (salePrice <= 0) {
-                    salePrice = 0;
-                } else if (salePrice > 0) {
-                    salePrice = 1;
-                }
+                salePrice = salePrice > 0 ? 1 : 0;
+                buyPrice = buyPrice > 0 ? 1 : 0;
+                stock = stock > 0 ? 1 : 0;
+                saleAmount = saleAmount > 0 ? 1 : 0;
+                buyAmount = buyAmount > 0 ? 1 : 0;
 
-                buyPrice = parseInt(ei.harga_beli_produk, 10) - parseInt(ej.harga_beli_produk, 10);
-                if (buyPrice <= 0) {
-                    buyPrice = 0;
-                } else if (buyPrice > 0) {
-                    buyPrice = 1;
-                }
-
-                stock = parseInt(ei.stok_produk, 10) - parseInt(ej.stok_produk, 10);
-                if (stock <= 0) {
-                    stock = 0;
-                } else if (buyPrice > 0) {
-                    stock = 1;
-                }
-
-                saleAmount = parseInt(ei.jumlah_penjualan_produk, 10) - parseInt(ej.jumlah_penjualan_produk, 10);
-                if (saleAmount <= 0) {
-                    saleAmount = 0;
-                } else if (buyPrice > 0) {
-                    saleAmount = 1;
-                }
-
-                buyAmount = parseInt(ei.jumlah_pembelian_produk, 10) - parseInt(ej.jumlah_pembelian_produk, 10);
-                if (buyAmount <= 0) {
-                    buyAmount = 0;
-                } else if (buyPrice > 0) {
-                    buyAmount = 1;
-                }
-
-                npk2.push({
+                const result = {
                     pSalePrice: salePrice,
                     pBuyPrice: buyPrice,
                     pStock: stock,
                     pSaleAmount: saleAmount,
                     pBuyAmount: buyAmount
-                });
+                };
 
-                npkTable.push({
-                    pSalePrice: salePrice,
-                    pBuyPrice: buyPrice,
-                    pStock: stock,
-                    pSaleAmount: saleAmount,
-                    pBuyAmount: buyAmount
-                });
+                npk2.push(result);
+                npkTable.push(result);
             }
             npk1.push(npk2);
         }
@@ -120,11 +95,11 @@ export default function SpkNpk() {
 
         const npkCol = [
             { field: "id", headerName: "No", width: 50 },
-            { field: "salePrice", headerName: "Harga Jual (K1)", width: 120 },
-            { field: "buyPrice", headerName: "Harga Beli (K2)", width: 120 },
-            { field: "pStock", headerName: "Stok Produk (K3)", width: 120 },
-            { field: "saleAmount", headerName: "Jumlah Penjualan (K4)", width: 160 },
-            { field: "buyAmount", headerName: "Jumlah Pembelian (K5)", width: 160 },
+            { field: "salePrice", headerName: "Harga Jual(K1)", width: 90 },
+            { field: "buyPrice", headerName: "Harga Beli(K2)", width: 90 },
+            { field: "pStock", headerName: "Stok Produk(K3)", width: 90 },
+            { field: "saleAmount", headerName: "Jumlah Penjualan(K4)", width: 140 },
+            { field: "buyAmount", headerName: "Jumlah Pembelian(K5)", width: 140 },
         ];
         setRowNpk(validNpkRows);
         setColumnNpk(npkCol);
@@ -179,9 +154,9 @@ export default function SpkNpk() {
         for (let i = 0; i < indeksPreferensiMultikriteria.length; i++) {
             const element = indeksPreferensiMultikriteria[i];
             const sum = element.reduce((acc, current) => acc + current.hasilIpm, 0);
-            const hasil = 1 / (5 - 1) * sum;
+            const hasil = parseFloat(1 / (5 - 1) * sum).toFixed(2);
             lf.push({
-                hasilLf: hasil
+                hasilLf: parseFloat(hasil)
             });
         }
         console.log(lf);
@@ -211,9 +186,9 @@ export default function SpkNpk() {
             const sumFirstIndex = indeksPreferensiMultikriteria.reduce((acc, current) => {
                 return acc + (current[i]?.hasilIpm || 0);
             }, 0);
-            const hasil = 1 / (5 - 1) * sumFirstIndex;
+            const hasil = parseFloat(1 / (5 - 1) * sumFirstIndex).toFixed(2);
             ef.push({
-                hasilEf: hasil
+                hasilEf: parseFloat(hasil)
             });
         }
         console.log(ef);
@@ -240,9 +215,9 @@ export default function SpkNpk() {
     const handleNf = async () => {
         const nf = [];
         for (let i = 0; i < leavingFlow.length; i++) {
-            const hasil = leavingFlow[i].hasilLf - enteringFlow[i].hasilEf;
+            const hasil = parseFloat(leavingFlow[i].hasilLf - enteringFlow[i].hasilEf).toFixed(2);
             nf.push({
-                hasilNf: hasil
+                hasilNf: parseFloat(hasil)
             });
         }
         console.log(nf);
@@ -278,6 +253,10 @@ export default function SpkNpk() {
         const rank = newNetFlow.sort((a, b) => b.hasilNf - a.hasilNf);
         console.log(rank);
 
+        let rankRows = [];
+        let validRankRows = 0;
+        let rankCol = [];
+
         if (stateMiatkWrench[0].id_kategori == 1) {
             await dispatch(rankWrenchDelete());
             for (let i = 0; i < rank.length; i++) {
@@ -288,17 +267,103 @@ export default function SpkNpk() {
                     netFlow: element.hasilNf
                 }))
             }
-        }else if (stateMiatkWrench[0].id_kategori == 2) {
-            // await dispatch(rankHammerDelete());
-            // for (let i = 0; i < rank.length; i++) {
-            //     const element = rank[i];
-            //     await dispatch(rankHammerCreate({
-            //         productId: element.product_id,
-            //         categoryId: element.category_id,
-            //         netFlow: element.hasilNf
-            //     }))
-            // }
+            rankRows =
+                stateRankWrench &&
+                stateRankWrench.map((item) => {
+                    return {
+                        id: item.alternatif_id,
+                        namaProduk: stateProducts && stateProducts.find((itemP) => itemP.product_id == item.product_id).product_name,
+                        hasilRank: item.net_flow.toFixed(2)
+                    };
+                });
+            validRankRows = rankRows ? rankRows.filter((row) => row.id !== undefined && row.id !== null) : [];
+
+            rankCol = [
+                { field: "id", headerName: "Rank", width: 50 },
+                { field: "namaProduk", headerName: "Nama Produk", width: 120 },
+                { field: "hasilRank", headerName: "Net Flow", width: 120 },
+            ];
+        } else if (stateMiatkWrench[0].id_kategori == 2) {
+            await dispatch(rankHammerDelete());
+            for (let i = 0; i < rank.length; i++) {
+                const element = rank[i];
+                await dispatch(rankHammerCreate({
+                    productId: element.product_id,
+                    productCategory: element.category_id,
+                    netFlow: element.hasilNf
+                }))
+            }
+            rankRows =
+                stateRankHammer &&
+                stateRankHammer.map((item) => {
+                    return {
+                        id: item.alternatif_id,
+                        namaProduk: stateProducts && stateProducts.find((itemP) => itemP.product_id == item.product_id).product_name,
+                        hasilRank: item.net_flow.toFixed(2)
+                    };
+                });
+            validRankRows = rankRows ? rankRows.filter((row) => row.id !== undefined && row.id !== null) : [];
+
+            rankCol = [
+                { field: "id", headerName: "Rank", width: 50 },
+                { field: "namaProduk", headerName: "Nama Produk", width: 120 },
+                { field: "hasilRank", headerName: "Net Flow", width: 120 },
+            ];
+        } else if (stateMiatkWrench[0].id_kategori == 3) {
+            await dispatch(rankDrillDelete());
+            for (let i = 0; i < rank.length; i++) {
+                const element = rank[i];
+                await dispatch(rankDrillCreate({
+                    productId: element.product_id,
+                    productCategory: element.category_id,
+                    netFlow: element.hasilNf
+                }))
+            }
+            rankRows =
+                stateRankDrill &&
+                stateRankDrill.map((item) => {
+                    return {
+                        id: item.alternatif_id,
+                        namaProduk: stateProducts && stateProducts.find((itemP) => itemP.product_id == item.product_id).product_name,
+                        hasilRank: item.net_flow.toFixed(2)
+                    };
+                });
+            validRankRows = rankRows ? rankRows.filter((row) => row.id !== undefined && row.id !== null) : [];
+
+            rankCol = [
+                { field: "id", headerName: "Rank", width: 50 },
+                { field: "namaProduk", headerName: "Nama Produk", width: 120 },
+                { field: "hasilRank", headerName: "Net Flow", width: 120 },
+            ];
+        } else if (stateMiatkWrench[0].id_kategori == 4) {
+            await dispatch(rankGrinderDelete());
+            for (let i = 0; i < rank.length; i++) {
+                const element = rank[i];
+                await dispatch(rankGrinderCreate({
+                    productId: element.product_id,
+                    productCategory: element.category_id,
+                    netFlow: element.hasilNf
+                }))
+            }
+            rankRows =
+                stateRankGrinder &&
+                stateRankGrinder.map((item) => {
+                    return {
+                        id: item.alternatif_id,
+                        namaProduk: stateProducts && stateProducts.find((itemP) => itemP.product_id == item.product_id).product_name,
+                        hasilRank: item.net_flow.toFixed(2)
+                    };
+                });
+            validRankRows = rankRows ? rankRows.filter((row) => row.id !== undefined && row.id !== null) : [];
+
+            rankCol = [
+                { field: "id", headerName: "Rank", width: 50 },
+                { field: "namaProduk", headerName: "Nama Produk", width: 120 },
+                { field: "hasilRank", headerName: "Net Flow", width: 120 },
+            ];
         }
+        setRowRank(validRankRows);
+        setColumnRank(rankCol);
     }
 
     console.log(stateMiatkWrench);
@@ -344,33 +409,33 @@ export default function SpkNpk() {
                     />
                 </div>
             </div>
-            <div className="h-fit w-full bg-red-100">
-                <h1 className="font-bold text-xl mb-3">Nilai Preferensi Kriteria</h1>
-                <button onClick={handleNpk} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
-                    Hitung Nilai Preferensi Kriteria
-                </button>
-                <div style={{ height: 400, width: "70%" }}>
-                    <DataGrid
-                        rows={rowNpk ? rowNpk : []}
-                        columns={columnNpk}
-                        initialState={{
-                            pagination: {
-                                paginationModel: { pageSize: 13, page: 0 },
-                            },
-                        }}
-                        getRowHeight={() => 'auto'}
-                        checkboxSelection
-                        disableSelectionOnClick
-                    />
+            <div className="flex flex-row h-fit w-full mt-[20px]">
+                <div className="h-fit w-[65%]">
+                    <h1 className="font-bold text-xl mb-3">Nilai Preferensi Kriteria</h1>
+                    <button onClick={handleNpk} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
+                        Hitung Nilai Preferensi Kriteria
+                    </button>
+                    <div style={{ height: 400, width: "95%" }}>
+                        <DataGrid
+                            rows={rowNpk ? rowNpk : []}
+                            columns={columnNpk}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: { pageSize: 13, page: 0 },
+                                },
+                            }}
+                            getRowHeight={() => 'auto'}
+                            checkboxSelection
+                            disableSelectionOnClick
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="flex flex-row">
-                <div className="h-fit w-full bg-green-100">
+                <div className="h-fit w-[35%]">
                     <h1 className="font-bold text-xl mb-3">Indeks Preferensi Multikriteria</h1>
                     <button onClick={handleIpm} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
                         Hitung Indeks Preferensi Multikriteria
                     </button>
-                    <div style={{ height: 400, width: "70%" }}>
+                    <div style={{ height: 400, width: "50%" }}>
                         <DataGrid
                             rows={rowIpm ? rowIpm : []}
                             columns={columnIpm}
@@ -385,18 +450,20 @@ export default function SpkNpk() {
                         />
                     </div>
                 </div>
-                <div className="h-fit w-full bg-blue-100">
+            </div>
+            <div className="flex flex-row mt-[20px]">
+                <div className="h-fit w-full">
                     <h1 className="font-bold text-xl mb-3">Leaving Flow</h1>
                     <button onClick={handleLf} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
                         Hitung Leaving Flow
                     </button>
-                    <div style={{ height: 400, width: "70%" }}>
+                    <div style={{ height: 800, width: "70%" }}>
                         <DataGrid
                             rows={rowLf ? rowLf : []}
                             columns={columnLf}
                             initialState={{
                                 pagination: {
-                                    paginationModel: { pageSize: 13, page: 0 },
+                                    paginationModel: { pageSize: 15, page: 0 },
                                 },
                             }}
                             getRowHeight={() => 'auto'}
@@ -405,18 +472,38 @@ export default function SpkNpk() {
                         />
                     </div>
                 </div>
-                <div className="h-fit w-full bg-orange-100">
+                <div className="h-fit w-full">
                     <h1 className="font-bold text-xl mb-3">Entering Flow</h1>
                     <button onClick={handleEf} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
                         Hitung Entering Flow
                     </button>
-                    <div style={{ height: 400, width: "70%" }}>
+                    <div style={{ height: 800, width: "70%" }}>
                         <DataGrid
                             rows={rowEf ? rowEf : []}
                             columns={columnEf}
                             initialState={{
                                 pagination: {
-                                    paginationModel: { pageSize: 13, page: 0 },
+                                    paginationModel: { pageSize: 15, page: 0 },
+                                },
+                            }}
+                            getRowHeight={() => 'auto'}
+                            checkboxSelection
+                            disableSelectionOnClick
+                        />
+                    </div>
+                </div>
+                <div className="h-fit w-full">
+                    <h1 className="font-bold text-xl mb-3">Net Flow</h1>
+                    <button onClick={handleNf} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
+                        Hitung Net Flow
+                    </button>
+                    <div style={{ height: 800, width: "70%" }}>
+                        <DataGrid
+                            rows={rowNf ? rowNf : []}
+                            columns={columnNf}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: { pageSize: 15, page: 0 },
                                 },
                             }}
                             getRowHeight={() => 'auto'}
@@ -426,39 +513,19 @@ export default function SpkNpk() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row">
-                <div className="h-fit w-full bg-purple-100">
-                    <h1 className="font-bold text-xl mb-3">Net Flow</h1>
-                    <button onClick={handleNf} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
-                        Hitung Net Flow
-                    </button>
-                    <div style={{ height: 400, width: "50%" }}>
-                        <DataGrid
-                            rows={rowNf ? rowNf : []}
-                            columns={columnNf}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: { pageSize: 13, page: 0 },
-                                },
-                            }}
-                            getRowHeight={() => 'auto'}
-                            checkboxSelection
-                            disableSelectionOnClick
-                        />
-                    </div>
-                </div>
-                <div className="h-fit w-full bg-purple-100">
+            <div className="flex flex-row mt-[20px]">
+                <div className="h-fit w-full">
                     <h1 className="font-bold text-xl mb-3">Perangkingan</h1>
                     <button onClick={handleRank} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 mb-[10px] rounded">
                         Perangkingan
                     </button>
-                    <div style={{ height: 400, width: "50%" }}>
+                    <div style={{ height: 800, width: "30%" }}>
                         <DataGrid
-                            rows={rowNf ? rowNf : []}
-                            columns={columnNf}
+                            rows={rowRank ? rowRank : []}
+                            columns={columnRank}
                             initialState={{
                                 pagination: {
-                                    paginationModel: { pageSize: 13, page: 0 },
+                                    paginationModel: { pageSize: 15, page: 0 },
                                 },
                             }}
                             getRowHeight={() => 'auto'}

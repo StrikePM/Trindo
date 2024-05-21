@@ -3,12 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { categoriesFetch } from "../../slices/sliceCategories";
 import { productsFetch } from "../../slices/sliceProducts";
 import { useNavigate } from "react-router-dom";
+import { rankWrenchFetch } from "../../slices/sliceRankWrench";
+import { rankHammerFetch } from "../../slices/sliceRankHammer";
+import { rankDrillFetch } from "../../slices/sliceRankDrill";
+import { rankGrinderFetch } from "../../slices/sliceRankGrinder";
 
 export default function Homepage(c) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { stateCategories, stateRefreshCategories } = useSelector((state) => state.categories);
     const { stateProducts, stateRefreshProd } = useSelector((state) => state.products);
+    const { stateRankWrench, stateRefreshRankWrench } = useSelector((state) => state.rankWrench);
+    const { stateRankHammer, stateRefreshRankHammer } = useSelector((state) => state.rankHammer);
+    const { stateRankDrill, stateRefreshRankDrill } = useSelector((state) => state.rankDrill);
+    const { stateRankGrinder, stateRefreshRankGrinder } = useSelector((state) => state.rankGrinder);
+
+    console.log(stateProducts);
 
     const [searchText, setSearchText] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(0);
@@ -16,6 +26,10 @@ export default function Homepage(c) {
     useEffect(() => {
         dispatch(categoriesFetch());
         dispatch(productsFetch());
+        dispatch(rankWrenchFetch());
+        dispatch(rankHammerFetch());
+        dispatch(rankDrillFetch());
+        dispatch(rankGrinderFetch());
     }, [selectedCategory]);
 
     const filteredProducts = stateProducts && stateProducts.filter((product) => {
@@ -65,31 +79,39 @@ export default function Homepage(c) {
                 </div>
                 <div className="flex flex-col w-[50%] h-full py-[30px] pr-[30px] pl-[15px]">
                     <div className="flex flex-row w-[100%] h-[100%] pb-[10px]">
-                        <button className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md mr-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
-                            <div className="flex w-[40%] h-full items-center justify-center">
-                                <span className="text-lg">test</span>
+                        <button onClick={() => navigate(`/detail/${stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id).product_id}`)} className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md mr-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                            <div className="flex flex-col w-[40%] h-full border-r-[1px] items-center justify-center">
+                                <span className="text-md">{stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id).product_name : ""}</span>
+                                <span className="text-md text-red-700">{stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id).category_name : ""}</span>
+                                <span className="text-md font-bold">Rp{stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id).product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ""}</span>
                             </div>
-                            <img className="w-[60%] h-full" src="#" alt="" />
+                            <img className="w-[60%] h-full" src={stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankWrench[0].product_id).product_image : ""} alt="" />
                         </button>
-                        <button className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md ml-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
-                            <div className="flex w-[40%] h-full items-center justify-center">
-                                <span className="text-lg">test</span>
+                        <button onClick={() => navigate(`/detail/${stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id).product_id}`)} className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md ml-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                            <div className="flex flex-col w-[40%] h-full items-center justify-center">
+                                <span className="text-md">{stateRankHammer[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id).product_name : ""}</span>
+                                <span className="text-md text-red-700">{stateRankHammer[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id).category_name : ""}</span>
+                                <span className="text-md font-bold">Rp{stateRankHammer[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id).product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ""}</span>
                             </div>
-                            <img className="w-[60%] h-full" src="#" alt="" />
+                            <img className="w-[60%] h-full" src={stateRankHammer[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankHammer[0].product_id).product_image : ""} alt="" />
                         </button>
                     </div>
                     <div className="flex flex-row w-[100%] h-[100%] pt-[10px]">
-                        <button className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md mr-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
-                            <div className="flex w-[40%] h-full items-center justify-center">
-                                <span className="text-lg">test</span>
+                        <button onClick={() => navigate(`/detail/${stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id).product_id}`)} className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md mr-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                            <div className="flex flex-col w-[40%] h-full items-center justify-center">
+                                <span className="text-md">{stateRankDrill[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id).product_name : ""}</span>
+                                <span className="text-md text-red-700">{stateRankDrill[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id).category_name : ""}</span>
+                                <span className="text-md font-bold">Rp{stateRankDrill[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id).product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ""}</span>
                             </div>
-                            <img className="w-[60%] h-full" src="#" alt="" />
+                            <img className="w-[60%] h-full" src={stateRankDrill[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankDrill[0].product_id).product_image : ""} alt="" />
                         </button>
-                        <button className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md ml-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
-                            <div className="flex w-[40%] h-full items-center justify-center">
-                                <span className="text-lg">test</span>
+                        <button onClick={() => navigate(`/detail/${stateRankWrench[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id).product_id}`)} className="flex flex-row w-[50%] h-[100%] shadow-md rounded-md ml-[10px] border-gray-200 border-[1px] overflow-hidden hover:-translate-y-0 hover:scale-110 hover:bg-white duration-100 active:scale-100">
+                            <div className="flex flex-col w-[40%] h-full items-center justify-center">
+                            <span className="text-md">{stateRankGrinder[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id).product_name : ""}</span>
+                                <span className="text-md text-red-700">{stateRankGrinder[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id).category_name : ""}</span>
+                                <span className="text-md font-bold">Rp{stateRankGrinder[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id).product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ""}</span>
                             </div>
-                            <img className="w-[60%] h-full" src="#" alt="" />
+                            <img className="w-[60%] h-full" src={stateRankGrinder[0] && stateProducts && stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id) ? stateProducts.find((item) => item.product_id == stateRankGrinder[0].product_id).product_image : ""} alt="" />
                         </button>
                     </div>
                 </div>

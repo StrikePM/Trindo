@@ -76,7 +76,7 @@ export default function ResupplyList() {
 
     return (
         <div style={{ height: 400, width: "100%" }}>
-            <h1 className="font-bold text-xl">Products List</h1>
+            <h1 className="font-bold text-xl">Resupply List</h1>
             <button onClick={() => navigate(`create-resupply`)} className="bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold py-2 px-4 rounded my-[10px]" >
                 Create New Resupply
             </button>

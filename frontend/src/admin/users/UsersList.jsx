@@ -60,7 +60,7 @@ export default function UsersList() {
 
     return (
         <div style={{ height: 400, width: "100%" }}>
-            <h1 className="font-bold text-xl mb-[20px]">Products List</h1>
+            <h1 className="font-bold text-xl mb-[20px]">User List</h1>
             
             <DataGrid
                 rows={validRows}

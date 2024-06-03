@@ -105,7 +105,7 @@ const sliceMiatkWrench = createSlice({
             .addCase(miatkWrenchCreate.fulfilled, (state, action) => {
                 state.createStatus = "success";
                 state.stateRefreshMiatkWrench = Math.random();
-                toast.success(`Berhasil membuat kategori`, {
+                toast.success(`Input Alternatif / Kriteria Berhasil`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -119,7 +119,7 @@ const sliceMiatkWrench = createSlice({
             .addCase(miatkWrenchCreate.rejected, (state, action) => {
                 state.status = "rejected";
                 state.errorMessage = action.payload;
-                toast.error(`Gagal membuat kategori: ${action.payload}`, {
+                toast.error(`Input Alternatif / Kriteria Gagal: ${action.payload}`, {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -141,11 +141,11 @@ const sliceMiatkWrench = createSlice({
                     state.stateMiatkWrench = updatedMiatkWrench;
                     state.editStatus = "success";
                     state.stateRefreshMiatkWrench = Math.random();
-                    toast.info("Kategori telah diedit!", {
+                    toast.info("Input Alternatif / Kriteria telah diedit!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error("Kategori gagal diedit!", {
+                    toast.error("Input Alternatif / Kriteria gagal diedit!", {
                         position: "bottom-left",
                     });
                 }
@@ -164,18 +164,18 @@ const sliceMiatkWrench = createSlice({
                     state.stateMiatkWrench = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshMiatkWrench = Math.random();
-                    toast.success("Kategori telah dihapus!", {
+                    toast.success("Input Alternatif / Kriteria telah dihapus!", {
                         position: "bottom-left",
                     });
                 } else {
-                    toast.error(`Kategori gagal dihapus`, {
+                    toast.error(`Input Alternatif / Kriteria gagal dihapus`, {
                         position: "bottom-left",
                     });
                 }
             })
             .addCase(miatkWrenchDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
-                toast.error(`Kategori gagal dihapus: ${action.error.message}`, {
+                toast.error(`Input Alternatif / Kriteria gagal dihapus: ${action.error.message}`, {
                     position: "bottom-left",
                 });
             });

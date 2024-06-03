@@ -33,7 +33,7 @@ const NavBar = () => {
         <nav className="fixed z-10 bg-white border-gray-200 dark:bg-gray-900 w-full h-[90px] border-b-[2px] shadow-md">
             <div className="max-w-screen flex flex-wrap items-center justify-between p-4 h-full ">
                 <Link to="/">
-                    <img src="https://res.cloudinary.com/dddrzjxb0/image/upload/v1713349601/Trindo/gndnn3h89yln348tcfee.png" className="h-[60px] mr-3" alt="Flowbite Logo" />
+                    <img src="https://res.cloudinary.com/dddrzjxb0/image/upload/v1717300092/cvttatjjgopfffjvguju.png" className="h-[60px] mr-3" alt="Flowbite Logo" />
                 </Link>
 
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">

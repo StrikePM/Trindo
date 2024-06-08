@@ -134,6 +134,7 @@ router.put('/profile', verifyUser, async (req, res) => {
     try {
         const { userName, userAddress, userPhone } = req.body;
         const id = req.session.uId;
+
         if(!userName || !userAddress || !userPhone) return res.status(204).json({msg: 'field kosong'});
 
         const data = await conn.execute(`UPDATE users SET user_name =?, user_address = ?, user_phone = ? WHERE user_id = ?`,

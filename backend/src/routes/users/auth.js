@@ -12,7 +12,7 @@ router.get('/me', async (req, res) => {
             return res.status(401).json({msg: 'mohon login ke akun anda'})
         }
         
-        const user = await conn.execute(`SELECT user_id, user_name, user_email, user_role FROM users WHERE user_id = ?`, [req.session.uId]);
+        const user = await conn.execute(`SELECT user_id, user_name, user_email, user_address, user_phone, user_role FROM users WHERE user_id = ?`, [req.session.uId]);
         
         if (!user[0][0]) {
             return res.status(404).json({msg: 'user tidak ditemukan'});

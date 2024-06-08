@@ -16,7 +16,7 @@ export const verifyUser = async (req, res, next) => {
     } catch (error) {
         res.status(400).json({
             statusCode: 400,
-            message: 'Have an error ' + e,
+            message: 'Have an error ' + error,
         });
     } finally {
         if (conn) {
@@ -40,7 +40,7 @@ export const isAdmin = async (req, res, next) => {
     } catch (error) {
         res.status(400).json({
             statusCode: 400,
-            message: 'Have an error ' + e,
+            message: 'Have an error ' + error,
         });
     } finally {
         if (conn) {

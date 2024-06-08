@@ -9,7 +9,8 @@ export default function SpkList() {
     const { stateCategories } = useSelector((state) => state.categories);
     const { stateTransaction } = useSelector((state) => state.transaction);
     const { stateResupply } = useSelector((state) => state.resupply);
-
+    const { stateCriteria } = useSelector((state) => state.criteria);
+    
     const navigate = useNavigate();
 
     const [miatk, setMiatk] = useState([]);
@@ -40,68 +41,68 @@ export default function SpkList() {
             let buyAmount = 0;
 
             //perbandingan alternatif terhadap kriteria harga jual
-            if (parseInt(hargaJualP, 10) >= 500 && parseInt(hargaJualP, 10) <= 49999) {
-                salePrice = 5;
-            } else if (parseInt(hargaJualP, 10) >= 50000 && parseInt(hargaJualP, 10) <= 99999) {
-                salePrice = 4;
-            } else if (parseInt(hargaJualP, 10) >= 100000 && parseInt(hargaJualP, 10) <= 599999) {
-                salePrice = 3;
-            } else if (parseInt(hargaJualP, 10) >= 600000 && parseInt(hargaJualP, 10) <= 4999999) {
-                salePrice = 2;
-            } else if (parseInt(hargaJualP, 10) >= 5000000) {
-                salePrice = 1;
+            if (parseInt(hargaJualP, 10) >= stateCriteria[0].sub_start_1 && parseInt(hargaJualP, 10) <= stateCriteria[0].sub_end_1) {
+                salePrice = stateCriteria[0].sub_weight_1;
+            } else if (parseInt(hargaJualP, 10) >= stateCriteria[0].sub_start_2 && parseInt(hargaJualP, 10) <= stateCriteria[0].sub_end_2) {
+                salePrice = stateCriteria[0].sub_weight_2;
+            } else if (parseInt(hargaJualP, 10) >= stateCriteria[0].sub_start_3 && parseInt(hargaJualP, 10) <= stateCriteria[0].sub_end_3) {
+                salePrice = stateCriteria[0].sub_weight_3;
+            } else if (parseInt(hargaJualP, 10) >= stateCriteria[0].sub_start_4 && parseInt(hargaJualP, 10) <= stateCriteria[0].sub_end_4) {
+                salePrice = stateCriteria[0].sub_weight_4;
+            } else if (parseInt(hargaJualP, 10) >= stateCriteria[0].sub_start_5) {
+                salePrice = stateCriteria[0].sub_weight_5;
             }
 
             //perbandingan alternatif terhadap kriteria harga beli
-            if (parseInt(hargaBeliP, 10) >= 500 && parseInt(hargaBeliP, 10) <= 49999) {
-                buyPrice = 5;
-            } else if (parseInt(hargaBeliP, 10) >= 50000 && parseInt(hargaBeliP, 10) <= 99999) {
-                buyPrice = 4;
-            } else if (parseInt(hargaBeliP, 10) >= 100000 && parseInt(hargaBeliP, 10) <= 599999) {
-                buyPrice = 3;
-            } else if (parseInt(hargaBeliP, 10) >= 600000 && parseInt(hargaBeliP, 10) <= 4999999) {
-                buyPrice = 2;
-            } else if (parseInt(hargaBeliP, 10) >= 5000000) {
-                buyPrice = 1;
+            if (parseInt(hargaBeliP, 10) >= stateCriteria[1].sub_start_1 && parseInt(hargaBeliP, 10) <= stateCriteria[1].sub_end_1) {
+                buyPrice = stateCriteria[1].sub_weight_1;
+            } else if (parseInt(hargaBeliP, 10) >= stateCriteria[1].sub_start_2 && parseInt(hargaBeliP, 10) <= stateCriteria[1].sub_end_2) {
+                buyPrice = stateCriteria[1].sub_weight_2;
+            } else if (parseInt(hargaBeliP, 10) >= stateCriteria[1].sub_start_3 && parseInt(hargaBeliP, 10) <= stateCriteria[1].sub_end_3) {
+                buyPrice = stateCriteria[1].sub_weight_3;
+            } else if (parseInt(hargaBeliP, 10) >= stateCriteria[1].sub_start_4 && parseInt(hargaBeliP, 10) <= stateCriteria[1].sub_end_4) {
+                buyPrice = stateCriteria[1].sub_weight_4;
+            } else if (parseInt(hargaBeliP, 10) >= stateCriteria[1].sub_start_5) {
+                buyPrice = stateCriteria[1].sub_weight_5;
             }
 
             //perbandingan alternatif terhadap kriteria stok
-            if (parseInt(stokP, 10) >= 0 && parseInt(stokP, 10) <= 5) {
-                stock = 1;
-            } else if (parseInt(stokP, 10) >= 6 && parseInt(stokP, 10) <= 10) {
-                stock = 2;
-            } else if (parseInt(stokP, 10) >= 11 && parseInt(stokP, 10) <= 15) {
-                stock = 3;
-            } else if (parseInt(stokP, 10) >= 16 && parseInt(stokP, 10) <= 20) {
-                stock = 4;
-            } else if (parseInt(stokP, 10) > 20) {
-                stock = 5;
+            if (parseInt(stokP, 10) >= stateCriteria[2].sub_start_1 && parseInt(stokP, 10) <= stateCriteria[2].sub_end_1) {
+                stock = stateCriteria[2].sub_weight_1;
+            } else if (parseInt(stokP, 10) >= stateCriteria[2].sub_start_2 && parseInt(stokP, 10) <= stateCriteria[2].sub_end_2) {
+                stock = stateCriteria[2].sub_weight_2;
+            } else if (parseInt(stokP, 10) >= stateCriteria[2].sub_start_3 && parseInt(stokP, 10) <= stateCriteria[2].sub_end_3) {
+                stock = stateCriteria[2].sub_weight_3;
+            } else if (parseInt(stokP, 10) >= stateCriteria[2].sub_start_4 && parseInt(stokP, 10) <= stateCriteria[2].sub_end_4) {
+                stock = stateCriteria[2].sub_weight_4;
+            } else if (parseInt(stokP, 10) > stateCriteria[2].sub_start_5) {
+                stock = stateCriteria[2].sub_weight_5;
             }
 
             //perbandingan alternatif terhadap kriteria jumlah penjualan
-            if (parseInt(jumlahPenjualanP, 10) >= 0 && parseInt(jumlahPenjualanP, 10) <= 5) {
-                saleAmount = 1;
-            } else if (parseInt(jumlahPenjualanP, 10) >= 6 && parseInt(jumlahPenjualanP, 10) <= 10) {
-                saleAmount = 2;
-            } else if (parseInt(jumlahPenjualanP, 10) >= 11 && parseInt(jumlahPenjualanP, 10) <= 15) {
-                saleAmount = 3;
-            } else if (parseInt(jumlahPenjualanP, 10) >= 16 && parseInt(jumlahPenjualanP, 10) <= 20) {
-                saleAmount = 4;
-            } else if (parseInt(jumlahPenjualanP, 10) > 20) {
-                saleAmount = 5;
+            if (parseInt(jumlahPenjualanP, 10) >= stateCriteria[3].sub_start_1 && parseInt(jumlahPenjualanP, 10) <= stateCriteria[3].sub_end_1) {
+                saleAmount = stateCriteria[3].sub_weight_1;
+            } else if (parseInt(jumlahPenjualanP, 10) >= stateCriteria[3].sub_start_2 && parseInt(jumlahPenjualanP, 10) <= stateCriteria[3].sub_end_2) {
+                saleAmount = stateCriteria[3].sub_weight_2;
+            } else if (parseInt(jumlahPenjualanP, 10) >= stateCriteria[3].sub_start_3 && parseInt(jumlahPenjualanP, 10) <= stateCriteria[3].sub_end_3) {
+                saleAmount = stateCriteria[3].sub_weight_3;
+            } else if (parseInt(jumlahPenjualanP, 10) >= stateCriteria[3].sub_start_4 && parseInt(jumlahPenjualanP, 10) <= stateCriteria[3].sub_end_4) {
+                saleAmount = stateCriteria[3].sub_weight_4;
+            } else if (parseInt(jumlahPenjualanP, 10) > stateCriteria[3].sub_start_5) {
+                saleAmount = stateCriteria[3].sub_weight_5;
             }
 
             //perbandingan alternatif terhadap kriteria jumlah pembelian
-            if (parseInt(jumlahPembelianP, 10) >= 0 && parseInt(jumlahPembelianP, 10) <= 5) {
-                buyAmount = 1;
-            } else if (parseInt(jumlahPembelianP, 10) >= 6 && parseInt(jumlahPembelianP, 10) <= 10) {
-                buyAmount = 2;
-            } else if (parseInt(jumlahPembelianP, 10) >= 11 && parseInt(jumlahPembelianP, 10) <= 15) {
-                buyAmount = 3;
-            } else if (parseInt(jumlahPembelianP, 10) >= 16 && parseInt(jumlahPembelianP, 10) <= 20) {
-                buyAmount = 4;
-            } else if (parseInt(jumlahPembelianP, 10) > 20) {
-                buyAmount = 5;
+            if (parseInt(jumlahPembelianP, 10) >= stateCriteria[4].sub_start_1 && parseInt(jumlahPembelianP, 10) <= stateCriteria[4].sub_end_1) {
+                buyAmount = stateCriteria[4].sub_weight_1;
+            } else if (parseInt(jumlahPembelianP, 10) >= stateCriteria[4].sub_start_2 && parseInt(jumlahPembelianP, 10) <= stateCriteria[4].sub_end_2) {
+                buyAmount = stateCriteria[4].sub_weight_2;
+            } else if (parseInt(jumlahPembelianP, 10) >= stateCriteria[4].sub_start_3 && parseInt(jumlahPembelianP, 10) <= stateCriteria[4].sub_end_3) {
+                buyAmount = stateCriteria[4].sub_weight_3;
+            } else if (parseInt(jumlahPembelianP, 10) >= stateCriteria[4].sub_start_4 && parseInt(jumlahPembelianP, 10) <= stateCriteria[4].sub_end_4) {
+                buyAmount = stateCriteria[4].sub_weight_4;
+            } else if (parseInt(jumlahPembelianP, 10) > stateCriteria[4].sub_start_5) {
+                buyAmount = stateCriteria[4].sub_weight_5;
             }
 
             //memasukan iterasi for kedalam state array

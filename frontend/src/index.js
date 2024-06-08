@@ -15,6 +15,7 @@ import transactionReducer, { transactionFetch } from "./slices/sliceTransaction"
 import usersReducer, { usersFetch } from "./slices/sliceUsers";
 import cartReducer, { getTotals } from "./slices/sliceCart";
 import AuthReducer from "./slices/sliceAuth";
+import criteriaReducer, { criteriaFetch } from "./slices/sliceCriteria";
 import miatkWrenchReducer, { miatkWrenchFetch } from './slices/sliceMiatk';
 import rankWrenchReducer, { rankWrenchFetch } from './slices/sliceRankWrench';
 import rankHammerReducer, { rankHammerFetch } from './slices/sliceRankHammer';
@@ -33,6 +34,7 @@ const store = configureStore({
     transaction: transactionReducer,
     users: usersReducer,
     cart: cartReducer,
+    criteria: criteriaReducer,
     miatkWrench: miatkWrenchReducer,
     rankWrench: rankWrenchReducer,
     rankHammer: rankHammerReducer,
@@ -48,6 +50,7 @@ store.dispatch(resupplyFetch());
 store.dispatch(transactionFetch());  
 store.dispatch(usersFetch());
 store.dispatch(getTotals());
+store.dispatch(criteriaFetch());
 store.dispatch(miatkWrenchFetch());
 store.dispatch(rankWrenchFetch());
 store.dispatch(rankHammerFetch());

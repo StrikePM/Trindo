@@ -81,6 +81,22 @@ export const usersDelete = createAsyncThunk(
     }
 );
 
+export const profileEdit = createAsyncThunk(
+    "users/profileEdit",
+    async (values) => {
+        try {
+            const response = await axios.put(
+                `${url}/profile`,
+                values,
+            );
+
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+
 //redux reducers atau pembuatan state untuk digunakan pada suatu komponen
 const sliceUsers = createSlice({
     name: "users",
@@ -177,6 +193,29 @@ const sliceUsers = createSlice({
                 toast.error(`User gagal dihapus: ${action.error.message}`, {
                     position: "bottom-left",
                 });
+            })
+            .addCase(profileEdit.pending, (state, action) => {
+                state.editStatus = "pending";
+            })
+            .addCase(profileEdit.fulfilled, (state, action) => {
+                if (action.payload) {
+                    const updatedUser = state.stateUsers.map((user) =>
+                        user.user_id === action.payload.user_id ? action.payload : user
+                    );
+                    state.stateUsers = updatedUser;
+                    state.editStatus = "success";
+                    state.stateRefreshUsers = Math.random();
+                    toast.info("User telah diedit!", {
+                        position: "bottom-left",
+                    });
+                } else {
+                    toast.error("User gagal diedit!", {
+                        position: "bottom-left",
+                    });
+                }
+            })
+            .addCase(profileEdit.rejected, (state, action) => {
+                state.editStatus = "rejected";
             });
     },
 });

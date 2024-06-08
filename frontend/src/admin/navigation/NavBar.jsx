@@ -17,6 +17,11 @@ const NavBar = () => {
         navigate("/cart");
     }
 
+    const handleProfilePage = (e) => {
+        e.preventDefault();
+        navigate("/profile");
+    }
+
     const handleAdminPage = (e) => {
         e.preventDefault();
         navigate("/admin/products");
@@ -43,6 +48,11 @@ const NavBar = () => {
                                 <li className="mr-[15px]">
                                     <button type="button" onClick={handleCartPage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
                                         Cart
+                                    </button>
+                                </li>
+                                <li className="mr-[15px]">
+                                    <button type="button" onClick={handleProfilePage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
+                                        Profile
                                     </button>
                                 </li>
                                 <li className="mr-[15px]">
@@ -78,6 +88,11 @@ const NavBar = () => {
                                 <li className="mr-[15px]">
                                     <button type="button" onClick={handleCartPage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
                                         Cart
+                                    </button>
+                                </li>
+                                <li className="mr-[15px]">
+                                    <button type="button" onClick={handleProfilePage} className="hover:-translate-y-0 hover:scale-110 hover:text-red-500 duration-100 active:scale-100 active:text-black">
+                                        Profile
                                     </button>
                                 </li>
                                 <li>

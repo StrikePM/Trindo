@@ -1,14 +1,26 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../../slices/sliceCart";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import InvoiceTemplate from "../pdf/InvoiceTemplate";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function CartPage() {
     const cart = useSelector((state) => state.cart);
     const { stateProducts } = useSelector((state) => state.products);
 
+    const [showDialog, setShowDialog] = useState(false);
+    const [loader, setLoader] = useState(false);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const invoiceRef = useRef(null);
 
     useEffect(() => {
         dispatch(getTotals());
@@ -28,9 +40,36 @@ export default function CartPage() {
         dispatch(clearCart());
     };
 
+    const handleOpenInvoice = () => {
+        setShowDialog(true);
+    }
+    const handleCloseInvoice = () => {
+        setShowDialog(false);
+    }
+
     const handleCheckout = () => {
 
     };
+
+    const handleDownloadInvoice = () => {
+        if (invoiceRef.current) {
+            setLoader(true);
+            html2canvas(invoiceRef.current, { allowTaint: true, useCORS: true }).then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const componentWidth = doc.internal.pageSize.getWidth();
+                const componentHeight = doc.internal.pageSize.getHeight();
+                doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
+                setLoader(false);
+                doc.save('receipt.pdf');
+            }).catch(err => {
+                console.error("Error capturing invoice: ", err);
+                setLoader(false);
+            });
+        } else {
+            console.error("Invoice element not found");
+        }
+    }
 
     console.log(cart);
     return (
@@ -105,9 +144,12 @@ export default function CartPage() {
                                 ))}
                         </div>
                         <div className="flex flex-row mt-[20px]">
-                            <div className="w-[70%] h-full">
-                                <button className="w-fit h-fit p-[10px] bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded" onClick={handleClearCart}>
+                            <div className="flex flex-col w-[70%] h-full">
+                                <button className="w-[150px] h-fit p-[10px] bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded" onClick={handleClearCart}>
                                     Clear Cart
+                                </button>
+                                <button className="w-[150px] h-fit p-[10px] mt-[10px] bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded"
+                                    onClick={handleOpenInvoice}>Print Invoice
                                 </button>
                             </div>
                             <div className="flex flex-col w-[30%]">
@@ -142,6 +184,29 @@ export default function CartPage() {
                     </div>
                 )}
             </div>
+            <Dialog
+                open={showDialog}
+                onClose={handleCloseInvoice}
+                aria-labelledby="order-pdf-dialog-title"
+                fullWidth
+                maxWidth="md"
+            >
+                <DialogTitle id="order-pdf-dialog-title">Invoice PDF</DialogTitle>
+                <DialogContent className="w-full h-[600px]">
+                    {/* Render the PDF component here */}
+                    <div ref={invoiceRef}>
+                        <InvoiceTemplate />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDownloadInvoice} color="success">
+                        Download
+                    </Button>
+                    <Button onClick={handleCloseInvoice} color="error">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

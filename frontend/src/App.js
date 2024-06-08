@@ -43,6 +43,7 @@ import Spk from "./admin/spk/Spk";
 import SpkList from "./admin/spk/SpkList";
 import SpkNpk from "./admin/spk/SpkNpk";
 import CartPage from "./client/dashboard/CartPage";
+import ProfilePage from "./client/dashboard/ProfilePage";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route index element={<Homepage />} />
             <Route path="detail/:spId" element={<DetailPage />} />
             <Route path="cart" element={<CartPage />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

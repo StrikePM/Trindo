@@ -4,7 +4,9 @@ import { toast } from 'react-toastify';
 import { setHeaders, url } from './api';
 
 const initialState = {
+    stateProcessTransaction: [],
     stateTransaction: [],
+    stateTransactionToken: [],
     stateRefreshTrans: null,
     status: null,
     createStatus: null,
@@ -76,6 +78,32 @@ export const transactionDelete = createAsyncThunk(
 
             return response.data;
         } catch (error) {
+            throw error;
+        }
+    }
+);
+
+export const processTransaction = createAsyncThunk(
+    "transaction/processTransaction",
+    async (values, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(
+                `${url}/process-transaction`,
+                values,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            if (error.response) {
+                const errorMessage = error.response.data.msg;
+                console.log(error);
+                return rejectWithValue(errorMessage);
+            }
             throw error;
         }
     }
@@ -175,6 +203,38 @@ const sliceCategories = createSlice({
             })
             .addCase(transactionDelete.rejected, (state, action) => {
                 state.deleteStatus = "rejected";
+            })
+            .addCase(processTransaction.pending, (state, action) => {
+                state.status = "pending";
+            })
+            .addCase(processTransaction.fulfilled, (state, action) => {
+                state.createStatus = "success";
+                state.stateTransactionToken = action.payload.token
+                state.stateRefreshTrans = Math.random();
+                toast.success(`Berhasil membuat transaction`, {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            })
+            .addCase(processTransaction.rejected, (state, action) => {
+                state.status = "rejected";
+                state.errorMessage = action.payload;
+                toast.error(`Gagal membuat transaction: ${action.payload}`, {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
     },
 });

@@ -10,11 +10,15 @@ import Button from "@mui/material/Button";
 import InvoiceTemplate from "../pdf/InvoiceTemplate";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { processTransaction, transactionCreate, transactionFetch } from "../../slices/sliceTransaction";
 
 export default function CartPage() {
     const cart = useSelector((state) => state.cart);
+    const auth = useSelector((state) => state.session);
+    const transaction = useSelector((state) => state.transaction);
     const { stateProducts } = useSelector((state) => state.products);
 
+    const [token, setToken] = useState("");
     const [showDialog, setShowDialog] = useState(false);
     const [loader, setLoader] = useState(false);
 
@@ -24,8 +28,53 @@ export default function CartPage() {
 
     useEffect(() => {
         dispatch(getTotals());
-
     }, [cart, dispatch]);
+
+    useEffect(() => {
+        dispatch(transactionFetch());
+    }, [transaction.stateRefreshTrans]);
+
+    useEffect(() => {
+        if (token) {
+            window.snap.pay(transaction.stateTransactionToken, {
+                onSuccess: (result) => {
+                    localStorage.setItem("Pembayaran", JSON.stringify(result));
+                    setToken("");
+                },
+                onPending: (result) => {
+                    localStorage.setItem("Pembayaran", JSON.stringify(result));
+                    setToken("");
+                },
+                onError: (error) => {
+                    console.log(error);
+                    setToken("");
+                },
+                onClose: () => {
+                    console.log("Anda belum menyelesaikan pembayaran");
+                    setToken("");
+                }
+            })
+        }
+    }, [token]);
+
+    useEffect(()=>{
+        const midtransUrl = process.env.REACT_APP_MIDTRANS_URL_SANDBOX;
+        const midtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
+
+        if (!midtransUrl || !midtransClientKey) {
+            console.error('Midtrans URL or Client Key is not defined');
+            return;
+        }
+
+        const scriptTag = document.createElement("script");
+        scriptTag.src = midtransUrl;
+        scriptTag.setAttribute("data-client-key", midtransClientKey);
+
+        document.body.appendChild(scriptTag);
+        return () => {
+            document.body.removeChild(scriptTag);
+        };
+    }, []);
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product));
@@ -47,8 +96,31 @@ export default function CartPage() {
         setShowDialog(false);
     }
 
-    const handleCheckout = () => {
+    const handleCheckout = async (cartItems) => {
+        // for (let i = 0; i < cartItems.cartTotalQuantity; i++) {
+        //     const element = cartItems.cartItems[i];
 
+        //     await dispatch(transactionCreate({
+        //         transactionUser: auth.stateAuth.user_id,
+        //         transactionProd: element.product_id,
+        //         transactionQty: element.cartQuantity,
+        //         transactionPrice: element.product_price,
+        //         transactionTotal: element.totalPrice * element.cartQuantity,
+        //         transactionDate: new Date().toLocaleString().split(',')[0],
+        //         transactionStatus: "pending",
+        //     }))
+        // }
+        
+        const selectedTrans = await transaction.stateTransaction
+            .filter(item => item.user_id === auth.stateAuth.user_id)
+            .reduce((latest, current) => (latest === null || current.transaction_id > latest.transaction_id) ? current : latest, null);
+        console.log(selectedTrans);
+        
+        await dispatch(processTransaction({
+            cartItems, auth, transactionId: selectedTrans.transaction_id
+        }));
+
+        setToken(transaction.stateTransactionToken);
     };
 
     const handleDownloadInvoice = () => {
@@ -72,6 +144,8 @@ export default function CartPage() {
     }
 
     console.log(cart);
+    console.log(transaction.stateTransactionToken);
+    console.log(new Date().toLocaleString().split(',')[0]);
     return (
         <div className="flex bg-white w-full h-full items-center justify-center py-[40px]">
             <div className="w-[900px] h-auto rounded-md overflow-hidden border-gray-200 border-[1px] shadow-md">
@@ -159,7 +233,7 @@ export default function CartPage() {
                                 </div>
                                 <div>
                                     <button className="w-full h-fit p-[10px] bg-red-700 hover:bg-red-600 active:bg-orange-600 active:scale-95 text-white font-bold rounded"
-                                        onClick={() => handleCheckout(cart.cartItems)}>Proceed to Checkout</button>
+                                        onClick={() => handleCheckout(cart)}>Proceed to Checkout</button>
                                 </div>
                                 <div className="continue-shopping mt-[10px]">
                                     <Link to="/" className="flex items-center">

@@ -8,26 +8,23 @@ const router = express.Router();
 router.post('/process-transaction', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
+        function generateUniqueOrderId() {
+            const now = Date.now(); // Current timestamp in milliseconds
+            const randomPart = Math.floor(1000 + Math.random() * 9000).toString(); // 4 random digits
+            const orderId = (now % 100000000).toString() + randomPart; // Last 8 digits of timestamp + 4 random digits
+            return orderId.substring(0, 8); // Ensure it’s an 8-digit number
+        }
+        
+        // Generate the unique order ID
+        const transactionId = generateUniqueOrderId();
+        
         const snap = new midtrans.Snap({
             isProduction: false,
             serverKey: process.env.MIDTRANS_SERVER_KEY,
             clientKey: process.env.MIDTRANS_CLIENT_KEY
         })
-        const { cartItems, auth, transactionId } = req.body;
-        console.log(cartItems);
-        console.log(auth);
-        console.log(transactionId);
-        // console.log(productName);
-        // console.log(productPrice.reduce((total, price) => total + price, 0));
-        // console.log(priceTotal);
-        // console.log(userEmail);
-        // console.log(userName);
-        // console.log(userPhone);
-        // console.log(userAddress);
-        // console.log(productId);
-        // console.log(productBrand);
-        // console.log(productCategory);
-        // console.log(transactionQty);
+        const { cartItems, auth } = req.body;
+        
         const parameter = {
             transaction_details: {
                 order_id: transactionId.toString(),
@@ -144,10 +141,6 @@ router.post('/transaction', verifyUser, isAdmin, async (req, res) => {
             message,
         });
 
-        // const getStock = await conn.execute(`SELECT product_stock FROM products WHERE product_id = ?`, [transactionName]);
-        // const currentStock = getStock[0][0].product_stock;
-        // const newStock = parseInt(currentStock, 10) + parseInt(transactionStock, 10);
-        // await conn.execute(`UPDATE products SET product_stock = ? WHERE product_id = ?`, [newStock, transactionName]);
     } catch (e) {
         res.status(400).json({
             statusCode: 400,
@@ -166,22 +159,7 @@ router.put('/transaction/:id', verifyUser, isAdmin, async (req, res) => {
         const { transactionUser, transactionProd, transactionQty, transactionPrice, transactionTotal, transactionDate, transactionStatus } = req.body;
         const id = parseInt(req.params.id, 10);
 
-        console.log(transactionUser);
-        console.log(transactionProd);
-        console.log(transactionQty);
-        console.log(transactionPrice);
-        console.log(transactionTotal);
-        console.log(transactionDate);
-        console.log(transactionStatus);
-
         if (!transactionUser || !transactionProd || !transactionQty || !transactionPrice || !transactionTotal || !transactionDate || !transactionStatus) return res.status(204).json({ msg: 'field kosong' });
-
-        // const getResupplyStock = await conn.execute(`SELECT transaction_stock FROM transaction WHERE transaction_id = ?`, [id]);
-        // const currentResupplyStock = getResupplyStock[0][0].transaction_stock;
-
-        // const getProductStock = await conn.execute(`SELECT product_stock FROM products WHERE product_id = ?`, [transactionName]);
-        // const currentProductStock = getProductStock[0][0].product_stock;
-        // const newCurrentStock = parseInt(currentProductStock, 10) - parseInt(currentResupplyStock, 10);
 
 
         const data = await conn.execute(`UPDATE transactions SET user_id =?, product_id=?, transaction_qty=?, transaction_price=?, transaction_total=?, transaction_date=?, transaction_status=? WHERE transaction_id = ?`,
@@ -197,8 +175,6 @@ router.put('/transaction/:id', verifyUser, isAdmin, async (req, res) => {
             message,
         });
 
-        // const newStock = newCurrentStock + parseInt(transactionStock, 10);
-        // await conn.execute(`UPDATE products SET product_stock = ? WHERE product_id = ?`, [newStock, transactionName]);
     } catch (e) {
         res.status(400).json({
             statusCode: 400,
@@ -215,13 +191,6 @@ router.delete('/transaction/:id', verifyUser, isAdmin, async (req, res) => {
     const conn = await getConnection()
     try {
         const id = parseInt(req.params.id, 10);
-
-        // const getResupply = await conn.execute(`SELECT * FROM transaction WHERE transaction_id = ?`, [id]);
-        // const currentResupplyStock = getResupply[0][0].transaction_stock;
-
-        // const getProductStock = await conn.execute(`SELECT product_stock FROM products WHERE product_id = ?`, [getResupply[0][0].product_id]);
-        // const currentProductStock = getProductStock[0][0].product_stock;
-        // const newStock = parseInt(currentProductStock, 10) - parseInt(currentResupplyStock, 10);
 
         const data = await conn.execute(`DELETE FROM transactions WHERE transaction_id = ?`, [id])
         var statusCode = 200, message = 'success';
@@ -243,7 +212,6 @@ router.delete('/transaction/:id', verifyUser, isAdmin, async (req, res) => {
             message
         })
 
-        // await conn.execute(`UPDATE products SET product_stock = ? WHERE product_id = ?`, [newStock, getResupply[0][0].product_id]);
     } catch (e) {
         res.status(400).json({
             statusCode: 400,

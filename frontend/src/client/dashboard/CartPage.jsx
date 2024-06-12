@@ -30,9 +30,9 @@ export default function CartPage() {
         dispatch(getTotals());
     }, [cart, dispatch]);
 
-    useEffect(() => {
-        dispatch(transactionFetch());
-    }, [transaction.stateRefreshTrans]);
+    // useEffect(() => {
+    //     dispatch(transactionFetch());
+    // }, [transaction.stateRefreshTrans]);
 
     useEffect(() => {
         if (token) {
@@ -111,13 +111,13 @@ export default function CartPage() {
         //     }))
         // }
         
-        const selectedTrans = await transaction.stateTransaction
-            .filter(item => item.user_id === auth.stateAuth.user_id)
-            .reduce((latest, current) => (latest === null || current.transaction_id > latest.transaction_id) ? current : latest, null);
-        console.log(selectedTrans);
+        // const selectedTrans = await transaction.stateTransaction
+        //     .filter(item => item.user_id === auth.stateAuth.user_id)
+        //     .reduce((latest, current) => (latest === null || current.transaction_id > latest.transaction_id) ? current : latest, null);
+        // console.log(selectedTrans);
         
         await dispatch(processTransaction({
-            cartItems, auth, transactionId: selectedTrans.transaction_id
+            cartItems, auth
         }));
 
         setToken(transaction.stateTransactionToken);

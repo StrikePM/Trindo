@@ -5,32 +5,84 @@ import midtrans from 'midtrans-client';
 
 const router = express.Router();
 
+function verifySignature(orderId, statusCode, grossAmount, serverKey, providedSignatureKey) {
+    const data = `${orderId}${statusCode}${grossAmount}${serverKey}`;
+    const expectedSignatureKey = crypto.createHash('sha512').update(data).digest('hex');
+    return expectedSignatureKey === providedSignatureKey;
+}
+
+router.post('/notification', async (req, res) => {
+    const notificationJson = req.body;
+    const { order_id: orderId, status_code: statusCode, gross_amount: grossAmount, signature_key: providedSignatureKey } = notificationJson;
+
+    // Verify the signature key
+    if (!verifySignature(orderId, statusCode, grossAmount, apiClient.apiConfig.serverKey, providedSignatureKey)) {
+        return res.status(400).send('Invalid signature');
+    }
+
+    apiClient.transaction.notification(notificationJson)
+        .then( async (statusResponse) => {
+            let transactionStatus = statusResponse.transaction_status;
+            let fraudStatus = statusResponse.fraud_status;
+
+            console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}.`);
+
+            const idArray = orderId.split('A');
+            const numericIdArray = idArray.map(id => parseInt(id, 10));
+
+            // Sample transactionStatus handling logic
+            if (transactionStatus === 'capture' && fraudStatus === 'accept') {
+                // updateTransactionStatus(orderId, 'success');
+            } else if (transactionStatus === 'settlement') {
+                for (let i = 0; i < numericIdArray.length; i++) {
+                    const element = numericIdArray[i];
+
+                    const data = await conn.execute(`UPDATE transactions SET transaction_status=? WHERE transaction_id = ?`,
+                        ['po selesai', element]);
+                    let statusCode = 200;
+                    let message = 'success';
+                    if (data[0] == 0) {
+                        statusCode = 400;
+                        message = 'failed';
+                    }
+                    res.status(statusCode).json({
+                        statusCode,
+                        message,
+                    });
+                }
+            } else if (['cancel', 'deny', 'expire'].includes(transactionStatus)) {
+                // updateTransactionStatus(orderId, 'failure');
+            } else if (transactionStatus === 'pending') {
+                // updateTransactionStatus(orderId, 'pending');
+            }
+
+            res.status(200).send('Notification received');
+        })
+        .catch((err) => {
+            console.error('Error processing notification:', err);
+            res.status(500).send('Error processing notification');
+        });
+});
+
 router.post('/process-transaction', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
-        function generateUniqueOrderId() {
-            const now = Date.now(); // Current timestamp in milliseconds
-            const randomPart = Math.floor(1000 + Math.random() * 9000).toString(); // 4 random digits
-            const orderId = (now % 100000000).toString() + randomPart; // Last 8 digits of timestamp + 4 random digits
-            return orderId.substring(0, 8); // Ensure it’s an 8-digit number
-        }
-        
-        // Generate the unique order ID
-        const transactionId = generateUniqueOrderId();
-        
         const snap = new midtrans.Snap({
             isProduction: false,
             serverKey: process.env.MIDTRANS_SERVER_KEY,
             clientKey: process.env.MIDTRANS_CLIENT_KEY
         })
-        const { cartItems, auth } = req.body;
+        const { cart, auth, latestTransactions } = req.body;
         
+        const transactionIds = latestTransactions.map(transaction => transaction.transaction_id);
+        const orderId = transactionIds.join('A');
+
         const parameter = {
             transaction_details: {
-                order_id: transactionId.toString(),
-                gross_amount: cartItems.cartTotalAmount
+                order_id: orderId,
+                gross_amount: cart.cartTotalAmount
             },
-            item_details: cartItems.cartItems.map(item => ({
+            item_details: cart.cartItems.map(item => ({
                 id: item.product_id.toString(),
                 name: item.product_name,
                 price: item.product_price,
@@ -195,7 +247,7 @@ router.delete('/transaction/:id', verifyUser, isAdmin, async (req, res) => {
         const data = await conn.execute(`DELETE FROM transactions WHERE transaction_id = ?`, [id])
         var statusCode = 200, message = 'success';
         if (data[0].affectedRows > 0) {
-            const tableName = 'transaction';
+            const tableName = 'transactions';
             const columnName = 'transaction_id';
             const maxIdQuery = `SELECT COALESCE(MAX(${columnName}), 0) + 1 AS max_id FROM ${tableName}`;
             const [maxIdData] = await conn.execute(maxIdQuery);

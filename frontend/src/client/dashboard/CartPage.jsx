@@ -21,43 +21,89 @@ export default function CartPage() {
     const [token, setToken] = useState("");
     const [showDialog, setShowDialog] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [transFetch, setTransFetch] = useState(false);
+    const [checkoutTrigger, setCheckoutTrigger] = useState(false);
+    const [checkoutProcessTrigger, setCheckoutProcessTrigger] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const invoiceRef = useRef(null);
 
+    const userTransactions = transaction.stateTransaction
+        .filter(item => item.user_id === auth.stateAuth.user_id);
+
+    const latestTransactions = userTransactions
+        .sort((a, b) => b.transaction_id - a.transaction_id)
+        .slice(0, cart.cartItems.length);
+
+    console.log(latestTransactions);
+
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
 
-    // useEffect(() => {
-    //     dispatch(transactionFetch());
-    // }, [transaction.stateRefreshTrans]);
+    useEffect(() => {
+        dispatch(transactionFetch());
+    }, [transaction.stateRefreshTrans]);
 
     useEffect(() => {
-        if (token) {
+        setTransFetch(transaction);
+    }, [dispatch]);
+
+    useEffect(() => {
+        console.log(transaction);
+        const handleCheckoutTrigger = async () => {
+            if (checkoutTrigger) {
+                await dispatch(processTransaction({
+                    cart, auth, latestTransactions
+                }));
+                setCheckoutProcessTrigger(true);
+            }
+        };
+
+        handleCheckoutTrigger();
+    }, [checkoutTrigger]);
+
+    useEffect(() => {
+        if (checkoutProcessTrigger == true) {
+            console.log(transaction.stateTransactionToken);
+            setToken(transaction.stateTransactionToken);
+        }
+    }, [checkoutProcessTrigger]);
+
+    useEffect(() => {
+        console.log(token);
+        if (token != "") {
             window.snap.pay(transaction.stateTransactionToken, {
                 onSuccess: (result) => {
                     localStorage.setItem("Pembayaran", JSON.stringify(result));
                     setToken("");
+                    setCheckoutTrigger(false);
+                    setCheckoutProcessTrigger(false);
                 },
                 onPending: (result) => {
                     localStorage.setItem("Pembayaran", JSON.stringify(result));
                     setToken("");
+                    setCheckoutTrigger(false);
+                    setCheckoutProcessTrigger(false);
                 },
                 onError: (error) => {
                     console.log(error);
                     setToken("");
+                    setCheckoutTrigger(false);
+                    setCheckoutProcessTrigger(false);
                 },
                 onClose: () => {
                     console.log("Anda belum menyelesaikan pembayaran");
                     setToken("");
+                    setCheckoutTrigger(false);
+                    setCheckoutProcessTrigger(false);
                 }
             })
         }
     }, [token]);
 
-    useEffect(()=>{
+    useEffect(() => {
         const midtransUrl = process.env.REACT_APP_MIDTRANS_URL_SANDBOX;
         const midtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
 
@@ -97,30 +143,32 @@ export default function CartPage() {
     }
 
     const handleCheckout = async (cartItems) => {
-        // for (let i = 0; i < cartItems.cartTotalQuantity; i++) {
-        //     const element = cartItems.cartItems[i];
+        for (let i = 0; i < cartItems.cartTotalQuantity; i++) {
+            const element = cartItems.cartItems[i];
 
-        //     await dispatch(transactionCreate({
-        //         transactionUser: auth.stateAuth.user_id,
-        //         transactionProd: element.product_id,
-        //         transactionQty: element.cartQuantity,
-        //         transactionPrice: element.product_price,
-        //         transactionTotal: element.totalPrice * element.cartQuantity,
-        //         transactionDate: new Date().toLocaleString().split(',')[0],
-        //         transactionStatus: "pending",
-        //     }))
-        // }
-        
-        // const selectedTrans = await transaction.stateTransaction
-        //     .filter(item => item.user_id === auth.stateAuth.user_id)
-        //     .reduce((latest, current) => (latest === null || current.transaction_id > latest.transaction_id) ? current : latest, null);
-        // console.log(selectedTrans);
-        
-        await dispatch(processTransaction({
-            cartItems, auth
-        }));
+            await dispatch(transactionCreate({
+                transactionUser: auth.stateAuth.user_id,
+                transactionProd: element.product_id,
+                transactionQty: element.cartQuantity,
+                transactionPrice: element.product_price,
+                transactionTotal: element.totalPrice * element.cartQuantity,
+                transactionDate: new Date().toLocaleString().split(',')[0],
+                transactionStatus: "pending",
+            }))
+        }
 
-        setToken(transaction.stateTransactionToken);
+        await dispatch(transactionFetch());
+
+        // const userTransactions = transaction.stateTransaction
+        //     .filter(item => item.user_id === auth.stateAuth.user_id);
+
+        // const latestTwoTransactions = userTransactions
+        //     .sort((a, b) => b.transaction_id - a.transaction_id)
+        //     .slice(0, 2);
+
+        // console.log(latestTwoTransactions);
+
+        setCheckoutTrigger(true);
     };
 
     const handleDownloadInvoice = () => {
@@ -143,8 +191,9 @@ export default function CartPage() {
         }
     }
 
-    console.log(cart);
+    console.log(cart.cartItems.length);
     console.log(transaction.stateTransactionToken);
+    console.log(transFetch);
     console.log(new Date().toLocaleString().split(',')[0]);
     return (
         <div className="flex bg-white w-full h-full items-center justify-center py-[40px]">

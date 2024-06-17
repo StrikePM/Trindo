@@ -71,13 +71,15 @@ export const transactionEdit = createAsyncThunk(
 export const transactionDelete = createAsyncThunk(
     "transaction/transactionDelete",
     async (transactionId) => {
+        console.log(transactionId);
         try {
             const response = await axios.delete(
                 `${url}/transaction/${transactionId}`,
             );
-
+            console.log(response.data);
             return response.data;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
@@ -192,8 +194,15 @@ const sliceCategories = createSlice({
                     state.stateTransaction = newList;
                     state.deleteStatus = "success";
                     state.stateRefreshTrans = Math.random();
-                    toast.success("Transaction telah dihapus!", {
+                    toast.success(`Transaction telah dihapus!`, {
                         position: "bottom-left",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
                     });
                 } else {
                     toast.error("Transaction gagal dihapus!", {
@@ -210,6 +219,7 @@ const sliceCategories = createSlice({
             .addCase(processTransaction.fulfilled, (state, action) => {
                 state.createStatus = "success";
                 state.stateTransactionToken = action.payload.token
+                console.log(state.stateTransactionToken);
                 state.stateRefreshTrans = Math.random();
                 toast.success(`Berhasil membuat transaction`, {
                     position: "bottom-left",

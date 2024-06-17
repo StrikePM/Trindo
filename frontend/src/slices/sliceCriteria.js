@@ -39,6 +39,7 @@ const sliceCriteria = createSlice({
             })
             .addCase(criteriaFetch.fulfilled, (state, action) => {
                 state.stateCriteria = action.payload;
+                state.stateRefreshCriteria = Math.random();
                 state.status = "success";
             })
             .addCase(criteriaFetch.rejected, (state, action) => {

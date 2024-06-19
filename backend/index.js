@@ -55,7 +55,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         secure: false, // Set to true if using HTTPS
-        sameSite: 'none' // Set to 'none' if using cross-site requests
+        sameSite: 'strict' // Set to 'none' if using cross-site requests
     },
 }))
 

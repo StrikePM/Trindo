@@ -16,7 +16,7 @@ router.post('/notification', async (req, res) => {
     const { order_id: orderId, status_code: statusCode, gross_amount: grossAmount, signature_key: providedSignatureKey } = notificationJson;
 
     // Verify the signature key
-    if (!verifySignature(orderId, statusCode, grossAmount, apiClient.apiConfig.serverKey, providedSignatureKey)) {
+    if (!verifySignature(orderId, statusCode, grossAmount, process.env.MIDTRANS_SERVER_KEY, providedSignatureKey)) {
         return res.status(400).send('Invalid signature');
     }
 
@@ -28,7 +28,8 @@ router.post('/notification', async (req, res) => {
             console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}.`);
 
             const idArray = orderId.split('A');
-            const numericIdArray = idArray.map(id => parseInt(id, 10));
+            const transactionIds = idArray.slice(0, -1);
+            const numericIdArray = transactionIds.map(id => parseInt(id, 10));
 
             // Sample transactionStatus handling logic
             if (transactionStatus === 'capture' && fraudStatus === 'accept') {
@@ -75,7 +76,8 @@ router.post('/process-transaction', verifyUser, async (req, res) => {
         const { cart, auth, latestTransactions } = req.body;
         
         const transactionIds = latestTransactions.map(transaction => transaction.transaction_id);
-        const orderId = transactionIds.join('A');
+        const randomNum = Math.floor(Math.random() * 1000); // Generates a random number between 0 and 999
+        const orderId = `${transactionIds.join('A')}A${randomNum}`;
 
         const parameter = {
             transaction_details: {
@@ -142,7 +144,7 @@ router.post('/process-transaction', verifyUser, async (req, res) => {
     }
 })
 
-router.get('/transaction', verifyUser, isAdmin, async (req, res) => {
+router.get('/transaction', verifyUser, async (req, res) => {
     const conn = await getConnection();
     try {
         const data = await conn.execute(`
@@ -174,7 +176,7 @@ router.get('/transaction', verifyUser, isAdmin, async (req, res) => {
     }
 })
 
-router.post('/transaction', verifyUser, isAdmin, async (req, res) => {
+router.post('/transaction', verifyUser, async (req, res) => {
     const conn = await getConnection()
 
     try {

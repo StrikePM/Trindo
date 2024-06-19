@@ -35,7 +35,8 @@ router.post('/login', async (req, res) => {
 
     try {
         const { userEmail, userPassword } = req.body;
-
+        console.log(userEmail);
+        console.log(userPassword);
         if(!userEmail || !userPassword) return res.status(204).json({msg: 'field kosong'});
 
         //cek email
@@ -49,14 +50,26 @@ router.post('/login', async (req, res) => {
         if (!match) {
             return res.status(400).json({msg: 'password salah'});
         }
-
+        console.log("test");
         //buat session
+        // req.session.uId = user[0][0].user_id;
+        // const idUser = user[0][0].user_id;
+        // const nameUser = user[0][0].user_name;
+        // const emailUser = user[0][0].user_email;
+        // const roleUser = user[0][0].user_role;
+        // res.status(200).json({idUser, nameUser, emailUser, roleUser});
         req.session.uId = user[0][0].user_id;
-        const idUser = user[0][0].user_id;
-        const nameUser = user[0][0].user_name;
-        const emailUser = user[0][0].user_email;
-        const roleUser = user[0][0].user_role;
-        res.status(200).json({idUser, nameUser, emailUser, roleUser});
+        req.session.save((err) => {
+            if (err) {
+                return res.status(500).json({msg: 'Failed to save session'});
+            }
+            res.status(200).json({
+                idUser: user[0][0].user_id,
+                nameUser: user[0][0].user_name,
+                emailUser: user[0][0].user_email,
+                roleUser: user[0][0].user_role
+            });
+        });
     } catch (e) {
         res.status(400).json({
             statusCode: 400,

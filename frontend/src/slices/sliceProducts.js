@@ -135,7 +135,6 @@ const sliceProducts = createSlice({
                 state.status = "pending";
             })
             .addCase(productsCreate.fulfilled, (state, action) => {
-                state.stateProducts.push(action.payload);
                 state.createStatus = "success";
                 state.stateRefreshProd = Math.random();
                 toast.success("Produk Telah Dibuat!", {

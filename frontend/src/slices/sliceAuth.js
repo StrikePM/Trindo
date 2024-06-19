@@ -17,6 +17,7 @@ export const sessionCreate = createAsyncThunk(
     "session/sessionCreate",
     async (values, { rejectWithValue }) => {
         try {
+            console.log(values);
             const response = await axios.post(
                 `${url}/login`,
                 values,

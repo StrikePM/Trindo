@@ -159,15 +159,6 @@ export default function CartPage() {
 
         await dispatch(transactionFetch());
 
-        // const userTransactions = transaction.stateTransaction
-        //     .filter(item => item.user_id === auth.stateAuth.user_id);
-
-        // const latestTwoTransactions = userTransactions
-        //     .sort((a, b) => b.transaction_id - a.transaction_id)
-        //     .slice(0, 2);
-
-        // console.log(latestTwoTransactions);
-
         setCheckoutTrigger(true);
     };
 

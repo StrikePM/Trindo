@@ -27,6 +27,24 @@ export const criteriaFetch = createAsyncThunk(
     }
 );
 
+export const criteriaEdit = createAsyncThunk(
+    "criteria/criteriaEdit",
+    async (values) => {
+        try {
+            console.log(values);
+            const response = await axios.put(
+                `${url}/criteria/${values.criteria.criteriaId}`,
+                values.criteria,
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+);
+
 //redux reducers atau pembuatan state untuk digunakan pada suatu komponen
 const sliceCriteria = createSlice({
     name: "criteria",
@@ -39,11 +57,33 @@ const sliceCriteria = createSlice({
             })
             .addCase(criteriaFetch.fulfilled, (state, action) => {
                 state.stateCriteria = action.payload;
-                state.stateRefreshCriteria = Math.random();
                 state.status = "success";
             })
             .addCase(criteriaFetch.rejected, (state, action) => {
                 state.status = "rejected";
+            })
+            .addCase(criteriaEdit.pending, (state, action) => {
+                state.editStatus = "pending";
+            })
+            .addCase(criteriaEdit.fulfilled, (state, action) => {
+                if (action.payload) {
+                    const updatedCriteria = state.stateCriteria.map((criteria) =>
+                        criteria.criteria_id === action.payload.criteria_id ? action.payload : criteria
+                    );
+                    state.stateCriteria = updatedCriteria;
+                    state.editStatus = "success";
+                    state.stateRefreshCriteria = Math.random();
+                    toast.info("Kriteria telah diedit!", {
+                        position: "bottom-left",
+                    });
+                } else {
+                    toast.error("Kriteria gagal diedit!", {
+                        position: "bottom-left",
+                    });
+                }
+            })
+            .addCase(criteriaEdit.rejected, (state, action) => {
+                state.editStatus = "rejected";
             });
     },
 });

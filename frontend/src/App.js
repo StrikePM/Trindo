@@ -44,6 +44,9 @@ import SpkList from "./admin/spk/SpkList";
 import SpkNpk from "./admin/spk/SpkNpk";
 import CartPage from "./client/dashboard/CartPage";
 import ProfilePage from "./client/dashboard/ProfilePage";
+import Criteria from "./admin/criteria/Criteria";
+import CriteriaList from "./admin/criteria/CriteriaList";
+import CriteriaEdit from "./admin/criteria/CriteriaEdit";
 
 function App() {
   return (
@@ -95,6 +98,10 @@ function App() {
               <Route path="create-transaction" element={<TransactionsCreate />} />
               <Route path="edit-transaction/:tId" element={<TransactionsEdit />} />
               <Route path="delete-transaction/:tId" element={<TransactionsDelete />} />
+            </Route>
+            <Route path="criteria" element={<Criteria />}>
+              <Route index element={<CriteriaList />} />
+              <Route path="edit-criteria/:cId" element={<CriteriaEdit />} />
             </Route>
             <Route path="spk" element={<Spk />}>
               <Route index element={<SpkList />} />

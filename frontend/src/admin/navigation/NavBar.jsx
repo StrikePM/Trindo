@@ -36,7 +36,7 @@ const NavBar = () => {
 
     return (
         <nav className="fixed z-10 bg-white border-gray-200 dark:bg-gray-900 w-full h-[90px] border-b-[2px] shadow-md">
-            <div className="max-w-screen flex flex-wrap items-center justify-between p-4 h-full ">
+            <div className="max-w-screen bg-white flex flex-wrap items-center justify-between p-4 h-full ">
                 <Link to="/">
                     <img src="https://res.cloudinary.com/dddrzjxb0/image/upload/v1717300092/cvttatjjgopfffjvguju.png" className="h-[60px] mr-3" alt="Flowbite Logo" />
                 </Link>

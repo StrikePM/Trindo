@@ -194,7 +194,7 @@ export default function CartPage() {
                 </div>
                 {cart.cartItems.length === 0 ? (
                     <div className="flex w-full h-full">
-                        <div className="flex flex-col w-full h-full items-center justify-center">
+                        <div className="flex flex-col w-full h-full     ">
                             <span className="mb-[10px]">Your cart is currently empty!</span>
                             <Link to="/">
                                 <svg
